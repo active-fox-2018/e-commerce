@@ -20,7 +20,7 @@ after(function (done) {
 describe('Validate User', function () {
   describe('POST /register', function () {
     it('should REGISTER a new user with status 201', function (done) {
-      const validData = {
+      const user = {
         name: 'Arief',
         email: 'arrv@mail.com',
         password: '123'
@@ -28,7 +28,7 @@ describe('Validate User', function () {
       chai
         .request(app)
         .post('/register')
-        .send(validData)
+        .send(user)
         .end(function (err, res) {
           expect(err).to.be.null;
           expect(res).to.have.status(201);
@@ -42,7 +42,7 @@ describe('Validate User', function () {
     });
 
     it('should SEND error message when name is empty', function (done) {
-      const invalidData = {
+      const user = {
         name: '',
         email: 'arrv@mail.com',
         password: '123'
@@ -50,7 +50,7 @@ describe('Validate User', function () {
       chai
         .request(app)
         .post('/register')
-        .send(invalidData)
+        .send(user)
         .end(function (err, res) {
           expect(err).to.be.null;
           expect(res).to.have.status(400);
@@ -60,7 +60,7 @@ describe('Validate User', function () {
     });
 
     it('should SEND error message when email is empty', function (done) {
-      const invalidData = {
+      const user = {
         name: 'Arief',
         email: '',
         password: '123'
@@ -68,7 +68,7 @@ describe('Validate User', function () {
       chai
         .request(app)
         .post('/register')
-        .send(invalidData)
+        .send(user)
         .end(function (err, res) {
           expect(err).to.be.null;
           expect(res).to.have.status(400);
@@ -78,7 +78,7 @@ describe('Validate User', function () {
     });
 
     it('should send error message when email already exists', function (done) {
-      const invalidData = {
+      const user = {
         name: 'Arief',
         email: 'arrv@mail.com',
         password: '123'
@@ -86,7 +86,7 @@ describe('Validate User', function () {
       chai
         .request(app)
         .post('/register')
-        .send(invalidData)
+        .send(user)
         .end(function (err, res) {
           // console.log(res.body);
           expect(err).to.be.null;
@@ -97,7 +97,7 @@ describe('Validate User', function () {
     });
 
     it('should SEND ERROR message when password is empty', function (done) {
-      const invalidData = {
+      const user = {
         name: 'Arief',
         email: 'arrv@gmail.com',
         password: ''
@@ -105,7 +105,7 @@ describe('Validate User', function () {
       chai
         .request(app)
         .post('/register')
-        .send(invalidData)
+        .send(user)
         .end(function (err, res) {
           expect(err).to.be.null;
           expect(res).to.have.status(400);
@@ -117,14 +117,14 @@ describe('Validate User', function () {
 
   describe('User Login', function () {
     it('should Login with status 200', function (done) {
-      const newUser = {
+      const user = {
         email: 'arrv@mail.com',
         password: '123'
       }
       chai
         .request(app)
         .post('/login')
-        .send(newUser)
+        .send(user)
         .end(function (err, res) {
           token = res.body.access_token;
           expect(err).to.be.null;
@@ -134,6 +134,38 @@ describe('Validate User', function () {
           expect(res.body).to.haveOwnProperty('message');
           expect(res.body.message).to.equal('Successfully login')
           done();
+        });
+    });
+
+    it('should SEND error if password doesnt match', function () {
+      const user = {
+        email: 'arrv@mail.com',
+        password: '1234'
+      }
+      chai
+        .request(app)
+        .post('/login')
+        .send(user)
+        .end(function (err, res) {
+          expect(err).to.be.null;
+          expect(res).to.have.status(404);
+          expect(res.body.error).to.equal('Wrong Password');
+        });
+    });
+
+    it('should SEND error if email is not registered', function () {
+      const user = {
+        email: 'arrv@gmail.com',
+        password: '1234'
+      }
+      chai
+        .request(app)
+        .post('/login')
+        .send(user)
+        .end(function (err, res) {
+          expect(err).to.be.null;
+          expect(res).to.have.status(404);
+          expect(res.body.error).to.equal('Email is not registered');
         });
     });
   });
