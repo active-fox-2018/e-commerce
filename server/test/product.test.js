@@ -1,3 +1,7 @@
+let Product = require('../models/productModel');
+let User = require('../models/userModel');
+// Cart
+
 const
   chai = require('chai'),
   chaiHttp = require('chai-http'),
@@ -5,9 +9,7 @@ const
   app = require('../app');
 
 const clearProduct = require('../helpers/clearProduct');
-const Product = require('../models/product');
 chai.use(chaiHttp);
-
 
 before(function (done) {
   clearProduct(done);
@@ -17,14 +19,34 @@ after(function (done) {
   clearProduct(done);
 });
 
+var token = ''
+
+//register post /users
+
 
 describe('CRUD Product', function () {
+
+  describe('GET /products', function () {
+    it('should GET all Products with status code 200', function (done) {
+      chai
+        .request(app)
+        .get('/products')
+        // .set('token', token)
+        .end(function (err, res) {
+          expect(err).to.be.null;
+          expect(res).to.have.status(200);
+          expect(res.body.data).to.be.an('array');
+          done();
+        });
+    });
+  });
+
   describe('POST /products', function () {
     it('should CREATE a Product with status code 201', function (done) {
       const newProduct = {
-        productName: 'Lord of the Rings',
-        price: 80000,
-        stock: 10
+        productName: 'The Lord of the Rings',
+        price: 120000,
+        stock: 20
       }
       chai
         .request(app)
@@ -46,27 +68,13 @@ describe('CRUD Product', function () {
     });
   });
 
-  describe('GET /products', function () {
-    it('should GET all Products with status code 200', function (done) {
-      chai
-        .request(app)
-        .get('/products')
-        .end(function (err, res) {
-          expect(err).to.be.null;
-          expect(res).to.have.status(200);
-          expect(res.body.data).to.be.an('array');
-          done();
-        });
-    });
-  });
-
   describe('PUT /products/:id', function () {
     it('shoud UPDATE a product given the id with status code 200', function (done) {
-      const product = {
-        name: 'The Book of Narnia',
-        price: 50000,
-        stock: 5
-      }
+      const product = new Product({
+        productName: 'The Chronicles of Narnia',
+        price: 100000,
+        stock: 30
+      })
       chai
         .request(app)
         .put('/products/' + product.id)
@@ -86,18 +94,22 @@ describe('CRUD Product', function () {
 
   describe('DELETE /producst/:id', function () {
     it('should DELETE a product given the id with status code 200', function (done) {
-      const product = {
-        name: 'The Book of Hmmm',
-        price: 50000,
-        stock: 15
-      }
+      const product = new Product({
+        productName: 'The Lord of the Rings',
+        price: 120000,
+        stock: 20
+      })
       chai
         .request(app)
         .delete('/products/' + product.id)
         .end(function (err, res) {
-          console.log(res.body);
+          // console.log(res.body);
           expect(err).to.be.null;
           expect(res).to.be.an('object');
+          expect(res.body.data).to.have.property('_id');
+          expect(res.body.data).to.have.property('productName');
+          expect(res.body.data).to.have.property('price');
+          expect(res.body.data).to.have.property('stock');
           done();
         });
     });

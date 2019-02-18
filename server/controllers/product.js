@@ -1,4 +1,4 @@
-const Product = require('../models/product');
+const Product = require('../models/productModel');
 
 module.exports = {
   createProduct: function (req, res) {
@@ -50,7 +50,7 @@ module.exports = {
   },
   deleteProduct: function (req, res) {
     Product
-      .findByIdAndDelete(req.params.id)
+      .findOneAndDelete(req.params.id)
       .then(data => {
         res.status(200).json({
           message: 'Product deleted!',
