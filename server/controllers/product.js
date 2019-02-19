@@ -14,8 +14,8 @@ module.exports = {
           data
         });
       })
-      .catch(err => {
-        res.status(500).json(err);
+      .catch(error => {
+        res.status(500).json(error);
       });
   },
   findAllProduct: function (req, res) {
@@ -26,39 +26,51 @@ module.exports = {
           data
         });
       })
-      .catch(err => {
-        res.status(500).json(err);
+      .catch(error => {
+        res.status(500).json(error);
+      });
+  },
+  findOneProduct: function (req, res) {
+    Product
+      .findOneAndUpdate({ _id: req.params.id })
+      .then(data => {
+        res.status(200).json(
+          { data }
+        );
+      })
+      .catch(error => {
+        res.status(500).json(error);
       });
   },
   updateProduct: function (req, res) {
     Product
-      .findOneAndUpdate(req.params.id,
+      .findOneAndUpdate({ _id: req.params.id },
         {
           productName: req.body.productName,
           price: req.body.price,
           stock: req.body.stock
-        })
+        }, { new: true })
       .then(data => {
         res.status(200).json({
           message: 'Product updated!',
           data
         });
       })
-      .catch(err => {
-        res.status(500).json(err);
+      .catch(error => {
+        res.status(500).json(error);
       });
   },
   deleteProduct: function (req, res) {
     Product
-      .findOneAndDelete(req.params.id)
+      .findOneAndDelete({ _id: req.params.id })
       .then(data => {
         res.status(200).json({
           message: 'Product deleted!',
           data
         });
       })
-      .catch(err => {
-        res.status(500).json(err);
+      .catch(error => {
+        res.status(500).json(error);
       });
   }
 };

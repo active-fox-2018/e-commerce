@@ -7,8 +7,6 @@ const
 const clearUser = require('../helpers/clearUser');
 chai.use(chaiHtpp);
 
-var token = '';
-
 before(function (done) {
   clearUser(done);
 });
@@ -17,7 +15,8 @@ after(function (done) {
   clearUser(done);
 });
 
-describe('Validate User', function () {
+describe('Register a new user and Login user', function () {
+
   describe('POST /register', function () {
     it('should REGISTER a new user with status 201', function (done) {
       const user = {
@@ -115,7 +114,7 @@ describe('Validate User', function () {
     });
   });
 
-  describe('User Login', function () {
+  describe('POST /login', function () {
     it('should Login with status 200', function (done) {
       const user = {
         email: 'arrv@mail.com',
