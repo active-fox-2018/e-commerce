@@ -11,6 +11,12 @@ $ npm install
 $ npm start
 ```
 
+To run the client, go to the client/ecommerce directory and enter:
+```
+$ npm install
+$ npm run serve
+```
+
 # API Documentation
 ## Login
 ```
@@ -102,4 +108,26 @@ POST /api/transactions/checkout
 ## View transaction history
 ```
 GET /api/transactions
+```
+
+## View transaction history of all customers
+(requires an admin role)
+```
+GET /api/transactions/all
+```
+
+## Give a payment confirmation
+```
+POST /api/trasactions/pay/:transactionId
+```
+
+## Inform the customers that the payment is confirmed and the order is being processed
+(requires an admin role)
+```
+POST /api/trasactions/send/:transactionId
+```
+
+## Give a confirmation that the order has arrived and close the transaction
+```
+POST /api/trasactions/finish/:transactionId
 ```
