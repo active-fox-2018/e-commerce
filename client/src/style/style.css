@@ -1,0 +1,140 @@
+.navbar {
+    height: 80px;
+    background: rgb(255, 235, 198);
+  }
+  
+  #navInput {
+    width: 250px;
+    height: 40px;
+    padding: 5px;
+    border: 1px solid orange;
+    color: black;
+    /* background: url('../assets/1.png') no-repeat 50% 50%; */
+    /* background-position: 15px 15px; */
+  }
+  
+  .buttonNav {
+    background: orange;
+    border: none;
+    border-radius: 5px;
+    min-width: 80px;
+    min-height: 40px;
+    text-align: center;
+    overflow: hidden;
+    font-weight: bold;
+    border-radius: 5px;
+  }
+  
+  .buttonNav:hover {
+    background: black;
+    color: orange;
+  }
+  
+  .buttonTrans {
+    background: none;
+    border: none;
+    border-radius: 5px;
+    width: 60px;
+    height: 40px;
+  }
+  
+  .buttonCo {
+    background: orange;
+    border: none;
+    border-radius: 5px;
+    width: 300px;
+    height: 40px;
+    text-align: center;
+    overflow: hidden;
+    font-weight: bold;
+  }
+
+  .buttonCo:hover {
+    background: rgb(54, 214, 39);
+    overflow: hidden;
+    font-weight: bold;
+  }
+
+  .buttonCat {
+    background: rgb(175, 0, 0);
+    color: white;
+    font-weight: bold;
+  }
+
+  .dropleft .dropdown-menu {
+    width: 300px;
+    border: 2px solid orange;
+  }
+  
+  a .p-2 .bd-highlight {
+    color: orange;
+  }
+  
+  .alertify .ajs-footer .ajs-buttons.ajs-primary .ajs-button {
+    background: orange;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .cardCust {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    border-radius: none;
+    max-width: 100%;
+    min-height: 200px;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    box-shadow: 5px 5px 8px hsla(0, 0%, 35%, 0.11);
+  }
+
+  .cardCust img {
+    width: 165px;
+    height: 198px;
+    /* border: 1px solid orange */
+  }
+
+  .cardCust-content {
+
+    padding: 10px;
+    width: 95%;
+    text-align: left;
+    line-height: 10px;
+  }
+
+  .cardCust-content h3 {
+    border-bottom: 1px solid grey;
+  }
+
+  .buttonTransCard {
+    border: none;
+    background: none;
+    color: rgb(39, 39, 39)
+  }
+  .buttonTransCard:hover {
+    color: orange;
+  }
+  
+  .input-group-text {
+    background: none;
+    border: none;
+  }
+
+  .list-group-item {
+    cursor: pointer;
+  }
+
+  .list-group-item:hover {
+    background: orange;
+  }
+
+  .category {
+    padding: 3px;
+    text-align: center;
+    width: 150px;
+    height: 30px;
+    background: orange;
+    color: black;
+    border-radius: 5px;
+    font-weight: bold
+  }
