@@ -19,7 +19,7 @@
                                 <span class="badge badge-warning">{{product.category}}</span>
                                 <h3>{{product.name}}</h3>
                                 <div>
-                                    <p>Lorem ipsum dolor si amet.</p>
+                                    <p>{{product.description}}</p>
                                     <div class="row">
                                         <div class="col">
                                             Price: Rp.{{product.price}}
@@ -31,7 +31,7 @@
                                     <div class="row mt-4">
                                         <div class="col d-flex flex-row-reverse bd-highlight">
                                             <button @click="deleteProduct(product._id)" class="buttonTransCard"><i style='font-size:24px' class='fas'>&#xf714;</i></button>
-                                            <button @click="editProduct(product._id)" class="buttonTransCard"><i style='font-size:24px' class='fas'>&#xf044;</i></button>
+                                            <button @click="findOneProduct(product._id)" class="buttonTransCard " data-toggle="modal" data-target="#exampleModalScrollable"><i style='font-size:24px' class='fas'>&#xf044;</i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalScrollableTitle">Add New Product</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button @click="update = false" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -93,7 +93,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button @click="addProduct()" type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                                <button @click="addProduct()" v-if="!update" type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                                <button @click="updateProduct()" v-if="update" type="submit" class="btn btn-primary" data-dismiss="modal">Save Update</button>
                             </div>
                         </fieldset>
                     <!-- </form> -->
@@ -118,7 +119,8 @@ export default {
       price: Number,
       stock: Number,
       category: '',
-      images: ''
+      images: '',
+      update: false
     }
   },
   methods: {
@@ -179,20 +181,43 @@ export default {
           token: localStorage.token
         }
       })
-    },
-    editProduct (productId) {
-      relicApi({
-        url: '/products',
-        method: 'put',
-        headers: {
-          token: localStorage.token
-        }
-      })
       .then(({ data }) => {
+        this.name = data.name
+        this.description = data.description
+        this.price = data.price
+        this.stock = data.stock
+        this.category = data.category
+        this.images = data.images
         console.log(data)
+        this.update = true
+        localStorage.setItem('productId', data._id)
       }).catch((err) => {
         console.log(err)
       });
+    },
+    updateProduct () {
+      let formData = new FormData()
+      formData.append('name', this.name)
+      formData.append('description', this.description)
+      formData.append('category', this.category)
+      formData.append('price', this.price)
+      formData.append('stock', this.stock)
+      formData.append('image', this.file)
+      relicApi
+        .put(`/products/${localStorage.productId}`, formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  token: localStorage.token
+                }
+        })
+        .then(({ data }) => {
+          this.update = false
+          localStorage.removeItem('productId')
+          this.$emit('update-product', data)
+        })
+        .catch((err) => {
+          console.log(err)
+        });
     }
   }
 }

@@ -32,7 +32,6 @@
             })
             .then(populated => {
                 res.status(201).json(populated)
-
             })
             .catch(err => {
                 console.log(err)
@@ -53,46 +52,22 @@
                 res.status(500).json(err)
             });
     },
-    addQty: (req, res) => {
+    updateQty: (req, res) => {    
         Cart
-            .findOne({_id: ObjectId(req.params.id)})
-            .then(cart => {
-                addQty = cart.qty + 1
-                cart.set({qty: addQty})
+            .findOne({_id: req.params.id})
+            .then((cart) => {
+                cart.set({qty: req.body.qty})
                 return cart.save()
             })
-            .then(updated => {
-                res.status(200).json({
-                    msg: 'Success add item',
-                    data: updated
-                })
-            })
-            .catch(err => {
-                res.status(500).json(err)
-            })
-    },
-    reduceQty: (req, res) => {
-        Cart
-            .findOne({_id: ObjectId(req.params.id)})
             .then(cart => {
-                if(cart.qty > 1) {
-                    let reduceQty = cart.qty - 1
-                    cart.set({qty: reduceQty})
-                    return cart.save()
-                } else if (cart.qty == 1) {
-                    return cart.remove({_id: ObjectId(req.params.id)})
-                }
+                return cart.populate('productId').execPopulate()
             })
-            .then(updated => {
-                res.status(200).json({
-                    msg: 'Success remove item',
-                    data: updated
-                })
+            .then(populated => {
+                res.status(200).json(populated)
             })
-            .catch(err => {
-                console.log(err)
+            .catch((err) => {
                 res.status(500).json(err)
-            })
+            });
     },
     removeCart: (req, res) => {
         Cart
@@ -103,30 +78,6 @@
             .catch(err => {
                 res.status(500).json(err.message)
             })
-    },
-    emptyCart: (req, res) => {
-        Cart
-            .find({userId: ObjectId(req.body.userId)})
-            .then(products => {
-                console.log(products)
-                products.forEach(function(element) {
-                    // query update
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
-        // Cart
-        //     .deleteMany({userId: ObjectId(req.body.userId)})
-        //     .then(emptyCart => {
-        //         console.log('SUKSES')
-
-        //         res.status(200).json({ data: emptyCart})
-        //         console.log(emptyCart, '=========')
-        //     })
-        //     .catch(err => {
-        //         res.status(500).json(err.message)
-        //     })
     },
     checkOutCart: (req, res) => {
         let data = req.body.items

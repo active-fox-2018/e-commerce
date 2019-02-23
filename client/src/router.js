@@ -41,6 +41,11 @@ export default new Router({
       path: '/user-transaction',
       name: 'userTransaction',
       component: () => import('./views/UserTransaction.vue')
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: () => import('./views/Search.vue')
     }
   ]
 })

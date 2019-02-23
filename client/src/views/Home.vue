@@ -3,6 +3,7 @@
     <Showcase
         :products="products"
         :details="details"
+        :isSearch="isSearch"
         @add-cart="addCart"
         @show-details="showDetails"></Showcase>
     <router-view
@@ -25,7 +26,7 @@ export default {
       details: false
     }
   },
-  props: ['products'],
+  props: ['products', 'productsCopy', 'isSearch'],
   methods: {
     addCart (payload) {
       this.$emit('add-cart', payload)
@@ -36,6 +37,6 @@ export default {
     hideDetails () {
       this.details = false
     }
-  }
+  },
 }
 </script>

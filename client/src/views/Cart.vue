@@ -34,11 +34,14 @@
                       <h5>Rp. {{cart.productId.price.toLocaleString()}}</h5>
                   </div>
                   <div class="col-2 align-items-center">
+                      <button @click="editQty()" v-if="!edit" class="buttonNav mb-2">edit</button>
+                      <button @click="updateQty(cart._id, cart.productId._id)" v-if="edit" class="buttonNav mb-2">save</button>
                       <div class="input-group " style="width:120px;height:60px;margin-left:20px;">
                           <div class="input-group-prepend" style="background:orange;border-top-left-radius:5px;border-bottom-left-radius:5px;">
                               <span class="input-group-text" style="font-weight:bold;">Qty</span>
                           </div>
-                          <input type="number" class="form-control" placeholder="0" :value="cart.qty" style="height:60px;">
+                          <input v-if="!edit" type="number" class="form-control" placeholder="0" :value="cart.qty" style="height:60px;" disabled>
+                          <input v-if="edit" v-model="qty" type="number" min="1" class="form-control" :placeholder="cart.qty" style="height:60px;">
                       </div>
                   </div>
                   <div class="col-2">
@@ -100,6 +103,7 @@
 import addressForm from '@/components/AddressForm.vue'
 import checkOut from '@/components/CheckOut.vue'
 import relicApi from '@/api/index'
+import alertify from 'alertifyjs'
 
 export default {
   name: 'cart',
@@ -112,7 +116,9 @@ export default {
       address: false,
       fetchData: false,
       cart: true,
-      shippingCost: null
+      shippingCost: null,
+      edit: false,
+      qty: Number,
     }
   },
   props: ['carts'],
@@ -125,9 +131,10 @@ export default {
           }
         })
         .then(({ data }) => {
+          alertify.success('Item Removed')
           this.$emit('remove-cart-item', data)
         }).catch((err) => {
-          console.log(err)
+          alertify.error('Please Try Again!')
         })
     },
     showAddressForm () {
@@ -139,6 +146,35 @@ export default {
     },
     emptyCart () {
       this.$emit('empty-cart')
+    },
+    editQty () {
+      if(this.edit) {
+        this.edit = false
+      } else {
+        this.edit = true
+      }
+    },
+    updateQty (cartId, productId) {
+      relicApi({
+        url: `/carts/${cartId}`,
+        method: 'patch',
+        headers: {
+          token: localStorage.token
+        },
+        data: {
+          qty: this.qty,
+          productId: productId
+        }
+      })
+      .then(({ data }) => {
+        console.log(data)
+        this.edit = false
+        this.$emit('update-cart', data)
+      })
+      .catch((err) => {
+        console.log(err.response)
+        alertify.error('Failed to Update, Please Try Again!')
+      });
     }
   },
   computed: {
@@ -149,7 +185,7 @@ export default {
       })
       return subTotal
     }
-  }
+  },
 }
 </script>
 

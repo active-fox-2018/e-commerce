@@ -6,20 +6,29 @@
     <Navbar
       @login-user="loginUser"
       @log-out="logOut"
+      @search-product="searchProduct"
       :isLogin="isLogin"
       :isAdmin="isAdmin"
       :isBuyer="isBuyer"
       :carts="carts">
     </Navbar>
 
+    <div class="alert alert-danger" role="alert">
+        A simple danger alert—check it out!
+    </div>
+
     <router-view
       @push-product="pushProduct"
       @delete-product="deleteProduct"
+      @update-product="updateProduct"
+      @update-cart="updateCart"
       @add-cart="addCart"
       @remove-cart-item="removeCartItem"
       @empty-cart="emptyCart"
       :products="products"
+      :productsCopy="productsCopy"
       :carts="carts"
+      :searcedProducts="searcedProducts"
       style="min-height:80vh"
     />
 
@@ -36,6 +45,7 @@ import Navbar from '@/components/Navbar.vue'
 import relicApi from '@/api/index'
 import alertify from 'alertifyjs'
 import { log } from 'util'
+import { triggerAsyncId } from 'async_hooks';
 
 export default {
   name: 'home',
@@ -46,7 +56,8 @@ export default {
       carts: [],
       isLogin: false,
       isAdmin: false,
-      isBuyer: false
+      isBuyer: false,
+      searcedProducts: []
     }
   },
   components: {
@@ -66,7 +77,6 @@ export default {
           localStorage.setItem('token', data.token)
           localStorage.setItem('userId', data.id)
           localStorage.setItem('role', data.role)
-          console.log(data)
           if(data.role == 'admin') {
             this.isLogin = true
             this.isAdmin = true
@@ -78,6 +88,7 @@ export default {
           }
         })
         .catch((err) => {
+          console.log(err.response)
           console.log(err)
         })
     },
@@ -113,6 +124,12 @@ export default {
     },
     pushProduct (payload) {
       this.products.unshift(payload)
+    },
+    updateProduct (payload) {
+      let index = this.products.findIndex(el => {
+          return el._id == payload._id
+      })
+      this.products.splice(index, 1, payload)
     },
     deleteProduct (payload) {
       let newData = this.products.filter(el => {
@@ -174,10 +191,27 @@ export default {
       })
       this.carts = remove
     },
+    updateCart (payload) {
+      let index = this.carts.findIndex(el => {
+          return el._id == payload._id
+      })
+      this.carts.splice(index, 1, payload)
+    },
     emptyCart () {
       console.log('emtpy cart')
 
       this.carts = []
+    },
+    searchProduct (payload) {
+      console.log(payload)
+      let searchObj = [...this.products]
+      let regex = new RegExp('.*' + payload + '.*', "i")
+      let searched = searchObj.filter(el => {
+        return el.name.match(regex) || el.category.match(regex)
+      })
+      console.log(searched)
+      this.searcedProducts = searched
+      this.$router.push(`/search?keyword=${payload}`)
     }
   },
   created () {
