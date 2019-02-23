@@ -66,6 +66,43 @@
 
         </div>
 
+        <div class="row ml-lg-2 mt-lg-2 ml-1">
+          <h5>Check postal cost:</h5>
+        </div>
+
+        <div class="row ml-lg-2 mt-lg-2 ml-1" >
+          <div class="form-group col">
+            <label>Province</label>
+            <b-form-select v-model="province" :options="optionsProv" />
+          </div>
+          <div class="form-group col">
+            <label>City</label>
+            <b-form-select v-model="city" :options="optionsCity" />
+          </div>
+          <div class="form-group col">
+            <label>Courier</label>
+            <b-form-select v-model="service" :options="optionsService" />
+          </div>
+           <div class="form-group col">
+            <button @click.prevent="cek" class="mt-4 btn btn-secondary" style="background-color: rgb(247, 247, 249)">check</button>
+          </div>
+        </div>
+
+        <div class="row ml-lg-2 mt-lg-2 ml-1" v-if="cost">
+            <div class="col">
+              <div class="row">
+                <h5>{{ cost.name }} </h5>
+              </div>
+              <div class="row" >
+                <div class="col card m-3 text-left" v-for="(op, i) in cost.costs" :key="i">
+                  <h5 class="row mx-1 mt-1">{{ op.service }}</h5>
+                  <p class="row mx-1">{{ op.description }}</p>
+                  <h6 class="row mx-1">Price: {{ op.cost[0].value }}</h6>
+                  <p class="row mx-1"> etd: {{ op.cost[0].etd }}</p>
+                </div>
+              </div>
+            </div>
+        </div>
       </div>
 
     </div>
@@ -84,7 +121,18 @@ export default {
   data () {
     return {
       product: null,
-      amount: null
+      amount: null,
+      province: null,
+      city: null,
+      service: null,
+      optionsProv: '',
+      optionsCity: '',
+      optionsService: [
+        { value: 'jne', text: 'JNE' },
+        { value: 'pos', text: 'POS' },
+        { value: 'tiki', text: 'TIKI' }
+      ],
+      cost: null
     }
   },
   methods: {
@@ -171,14 +219,62 @@ export default {
               })
           }
         })
+    },
+    getProv () {
+      server({
+        method: 'get',
+        url: `/postal/province`,
+      })
+      .then(({ data }) => {
+        this.optionsProv = data
+      })
+      .catch(err => {
+        alertify.error(`Ooopss something went wrong!`)
+        console.log(err.response)
+      })
+    },
+    getCity (prov) {
+      server({
+        method: 'get',
+        url: `postal/city?province=${prov}`
+      })
+        .then(({ data }) => {
+          this.optionsCity = data
+        })
+        .catch(err => {
+          alertify.error(`Ooopss something went wrong!`)
+          console.log(err.response)
+        })
+    },
+    cek () {
+      server({
+        method: 'post',
+        url: '/postal',
+        data: {
+          destination: this.city,
+          courier: this.service
+        }
+      })
+      .then(({ data }) => {
+        console.log(data[0])
+        this.cost = data[0]
+      })
+      .catch(err => {
+        alertify.error(`Ooopss something went wrong`)
+        console.log(err.response)
+      })
     }
   },
   created () {
     this.getProduct()
+    this.getProv()
   },
   watch: {
     '$route' (to, from) {
       this.getProduct()
+    },
+    province (val) {
+      this.getCity(val)
     }
   }
 }
