@@ -1,0 +1,51 @@
+@media only screen and (max-width: 991px) {
+    .navbar { 
+        padding: 1.5rem
+    }
+}
+
+@media only screen and (min-width: 991px) {
+    .navbar { 
+        padding: 0.3rem
+    }
+}
+
+.my-card {
+    max-width: 28vw;
+    margin: 1rem;
+    background-color: rgb(255, 255, 255);
+    border-color: transparent;
+    box-shadow: 0px 0px 0px lightgrey;
+    -webkit-transition:  box-shadow .3s ease-out;
+       box-shadow: .8px .9px 3px lightgrey;
+}
+
+.product-img {
+    height: 100%;
+    width: 100%;
+    padding: 0.8rem;
+}
+
+.my-card:hover {
+    /* border: 2px solid lightgrey; */
+    box-shadow: 1px 8px 20px grey;
+    -webkit-transition:  box-shadow .3s ease-in;
+}
+
+.detail-img {
+    height: 100%;
+    width: 100%;
+}
+
+.click-able {
+    cursor: pointer
+}
+
+.custom-control-label::before {
+    background-color: white;
+    border: 1px solid black;
+}
+
+.sticky-top {
+    z-index: 0;
+}

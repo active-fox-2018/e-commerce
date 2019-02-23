@@ -9,15 +9,44 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: 'product/:id',
+          name: 'product',
+          component: () => import('./components/detailProduct.vue')
+        }
+      ]
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/profile',
+      name: 'profile',
+      component: () => import('./views/Profile.vue')
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: () => import('./views/Cart.vue')
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('./views/Form.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('./views/Form.vue')
+    },
+    {
+      path: '/sell',
+      name: 'sell',
+      component: () => import('./views/Form.vue')
+    },
+    {
+      path: '/editProduct/:id',
+      name: 'editProduct',
+      component: () => import('./views/Form.vue')
     }
   ]
 })

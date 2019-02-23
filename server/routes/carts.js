@@ -5,11 +5,16 @@ const { verifyProduct, verifyUser, authUser, verifyCart, authAdmin } = require('
 
 route.use(verifyUser)
 route.get('/', CartController.findMyCart)
-route.post('/:id', verifyProduct, CartController.create)
+route.get('/history', CartController.getHistory)//dah
+route.get('/:id', verifyCart, authUser, CartController.findOne)
+
+route.post('/:id', verifyProduct, CartController.create) // IDNYA ID PRODUCT
+route.put('/:id/checkout', verifyCart, CartController.checkoutOne)
+route.put('/', CartController.checkout) // => belom bisa :(
+route.put('/:id/recieved', verifyCart, CartController.recievedOne)
+route.put('/:id', verifyCart, authUser, CartController.update)
 
 route.delete('/', CartController.clearCart)
-route.get('/:id', verifyCart, authUser, CartController.findOne)
-route.put('/:id', verifyCart, authUser, CartController.update)
 route.delete('/:id', verifyCart, authUser, CartController.deleteOne)
 
 

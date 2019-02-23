@@ -1,18 +1,25 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <router-view @delete-product="deleteProduct" :user="user"></router-view>
+    <div class="card-columns" style="column-count: 4">
+      <ProductCard v-for="product in products" :key="product._id" :product="product" />
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ProductCard from '@/components/productCard.vue'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    ProductCard
+  },
+  props: ['products', 'user'],
+  methods: {
+    deleteProduct (id) {
+      this.$emit('delete-product', id)
+    }
   }
 }
 </script>

@@ -5,7 +5,7 @@ const ObjId = require('mongoose').Types.ObjectId
 class ProductController {
 
     static findAll(req, res) {
-        Product.find({})
+        Product.find({ qty: { $gt: 0 } })
             .then(list => {
                 res.status(200).json(list)
             })
@@ -100,7 +100,7 @@ class ProductController {
     static delete (req, res) {
         req.currentProduct.remove()
             .then(data => {
-                return Cart.find({ product: ObjId(req.params.id)})
+                return Cart.find({ product: req.currentProduct._id})
             })
             .then(found => {
                 if (found.length == 0) {
@@ -108,7 +108,7 @@ class ProductController {
                         msg: req.params.id
                     })
                 } else {
-                    return found.remove()
+                    return Cart.deleteMany({ product: req.currentProduct._id })
                 }
             })
             .then(removed => {

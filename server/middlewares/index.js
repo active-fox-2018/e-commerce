@@ -104,7 +104,7 @@ module.exports = {
         }
     },
     authUser (req, res, next) {
-        if (String(req.currentCart.user) == String(req.currentUser._id)) {
+        if (String(req.currentCart.user._id) == String(req.currentUser._id)) {
             next()
         } else {
             res.status(401).json({

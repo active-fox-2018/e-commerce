@@ -3,8 +3,9 @@ const route = express.Router()
 const ProductController = require('../controllers/ProductController')
 const { verifyProduct, verifyUser, authAdmin } = require('../middlewares')
 const images = require('../helpers/image')
+
 route.get('/', ProductController.findAll)
-route.get('/:id', ProductController.findOne)
+route.get('/:id',verifyProduct, ProductController.findOne)
 
 route.use(verifyUser)
 route.use(authAdmin)
