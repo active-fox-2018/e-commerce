@@ -81,6 +81,7 @@
 
 <script>
 import relicApi from '@/api/index'
+import alertify from 'alertifyjs'
 
 export default {
   props: ['carts', 'totalItemPrice', 'shippingCost'],
@@ -97,10 +98,9 @@ export default {
         }
       })
         .then(({ data }) => {
-          console.log('masuk then')
-          console.log(data)
           this.$emit('empty-cart')
           this.$router.push('/user-transaction')
+          alertify.success('Check Out Success')
         }).catch((err) => {
           console.log(err)
         })

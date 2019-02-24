@@ -9,6 +9,18 @@
             </div>
         </div>
         <hr>
+
+        <!-- Loading -->
+        <div v-if="loading" >
+          <div class="spinner-border text-warning" role="status">
+              <span class="sr-only"></span>
+          </div>
+          <div>
+              {{loadingMsg}}
+          </div>
+        </div>
+        <!-- Loading -->
+
         <div v-if="products.length > 0" class="container">
             <div class="row">
                 <div class="col-6" v-for="(product, index) in products" :key="index">
@@ -120,11 +132,14 @@ export default {
       stock: Number,
       category: '',
       images: '',
-      update: false
+      update: false,
+      loading: false,
+      loadingMsg: ''
     }
   },
   methods: {
     addProduct () {
+      this.loading = true
       let formData = new FormData()
       formData.append('name', this.name)
       formData.append('description', this.description)
@@ -148,6 +163,8 @@ export default {
           this.stock = null
           this.file = null
           this.$emit('push-product', data)
+          this.loading = false
+          this.loadingMsg = 'posting product . . .'
         }).catch((err) => {
           console.log(err)
         })

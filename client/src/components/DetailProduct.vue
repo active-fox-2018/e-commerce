@@ -22,7 +22,7 @@
         </div>
         <div class="row mb-2">
           <img @click="minStock()" src="../assets/left.png">
-          <input v-model="qty" class="mr-2 ml-2" type="text" style="width:50px;text-align:center">
+          <input v-model="qty" class="mr-2 ml-2" type="number" min="1" style="width:50px;text-align:center">
           <img @click="plusStock()" src="../assets/right.png">
         </div>
         <div class="row">
@@ -46,7 +46,7 @@ import relicApi from '@/api/index'
 export default {
   data () {
     return {
-      qty: 0,
+      qty: 1,
       details: {}
     }
   },

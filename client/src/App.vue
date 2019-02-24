@@ -80,22 +80,28 @@ export default {
         }
       })
         .then(({ data }) => {
+          alertify.success('Login Success')
           localStorage.setItem('token', data.token)
           localStorage.setItem('userId', data.id)
           localStorage.setItem('role', data.role)
           if (data.role == 'admin') {
-            this.isLogin = true
-            this.isAdmin = true
-            this.$router.push('/transaction')
+              setTimeout(() => {
+                this.alert = false
+                this.isLogin = true
+                this.isAdmin = true
+                this.$router.push('/transaction')
+            }, 2000)
           } else if (data.role == 'buyer') {
-            this.isLogin = true
-            this.isBuyer = true
-            this.$router.push('/')
+              setTimeout(() => {
+                this.alert = false
+                this.isLogin = true
+                this.isBuyer = true
+                this.$router.push('/')
+              }, 2000)
           }
         })
         .catch((err) => {
           console.log(err.response.data)
-
           this.alertsMsg = err.response.data
           this.alert = true
           setTimeout(() => {
@@ -183,7 +189,10 @@ export default {
           if (!localStorage.token) {
             alertify.error('Please Login First!')
             this.$router.push('/login')
-          } else {
+          } else if (localStorage.role == 'admin') {
+            alertify.error('You cannot buy this item')
+          }
+          else {
             alertify.error('Product is Out of Stock')
           }
           console.log(err)
@@ -199,7 +208,6 @@ export default {
       })
         .then(({ data }) => {
           this.carts = data
-          console.log(data, '====== data carts')
         }).catch((err) => {
           console.log(err)
         })
@@ -218,17 +226,14 @@ export default {
     },
     emptyCart () {
       console.log('emtpy cart')
-
       this.carts = []
     },
     searchProduct (payload) {
-      console.log(payload)
       let searchObj = [...this.products]
       let regex = new RegExp('.*' + payload + '.*', 'i')
       let searched = searchObj.filter(el => {
         return el.name.match(regex) || el.category.match(regex)
       })
-      console.log(searched)
       this.searcedProducts = searched
       this.$router.push(`/search?keyword=${payload}`)
     }

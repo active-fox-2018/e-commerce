@@ -8,7 +8,7 @@ function userAuth(req, res, next) {
         .findOne({email: email})
         .then((user) => {
             if (user) {
-                if (user.role == 'buyer' || user.role == 'admin') {
+                if (user.role == 'buyer') {
                     req.current_user = user
                     next()
                 } else {

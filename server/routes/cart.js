@@ -8,12 +8,13 @@ const {
     removeCart,
     updateQty } = require('../controllers/cartController')
 
+const userAuth = require('../middlewares/userAuth')
 const { findOneProduct } = require('../middlewares/findProduct')
 
-router.post('/',  findOneProduct, createCart)
+router.post('/', userAuth, findOneProduct, createCart)
 router.get('/', getAllCart)
-router.put('/',checkOutCart)
-router.patch('/:id', findOneProduct, updateQty)
-router.delete('/:id', removeCart)
+router.put('/', userAuth, checkOutCart)
+router.patch('/:id', userAuth, findOneProduct, updateQty)
+router.delete('/:id', userAuth, removeCart)
 
 module.exports = router;

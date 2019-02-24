@@ -49,6 +49,7 @@
         </div>
 
         <div class="col">
+          Transaction Done
           <div class="row">
               <div class="col">
                 <div v-for="(data, index) in transactions" :key="index">

@@ -127,8 +127,8 @@ export default {
       this.$emit('log-out')
     },
     search () {
-      this.keyword = ''
       this.$emit('search-product', this.keyword)
+      this.keyword = ''
     },
     filter (input) {
       this.$emit('search-product', input)

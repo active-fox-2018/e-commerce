@@ -12,9 +12,10 @@ var app = express();
 
 app.use(cors())
 
-const status = process.env.NODE_ENV || 'development'
-// const url = `mongodb://localhost:27017/eCommerce-${status}`
-const url = `mongodb://localhost:27017/relictstore`
+// const status = process.env.NODE_ENV || 'development'
+// const url = `mongodb://localhost:27017/relictstore-${status}`
+// const url = `mongodb://localhost:27017/relictstore`
+const url = `mongodb://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@ds125602.mlab.com:25602/relic-ecommerce`
 mongoose.connect(url, { useNewUrlParser: true })
 .then(()=>{console.log("connected")},
   err =>{console.log("err",err);}
