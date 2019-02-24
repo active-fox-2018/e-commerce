@@ -1,0 +1,176 @@
+require('dotenv').config()
+
+const Transaction = require('../models/Transaction')
+const Location = require('../models/Location')
+const RajaOngkirAPIKey = process.env.RAJA_ONGKIR_KEY
+const axios = require('axios')
+
+class TransactionController {
+  static create(req, res) {
+    Transaction
+      .create({
+        userId: req.user._id,
+        cartId: req.body.cartId,
+        totalPrice: req.body.totalPrice,
+        status: req.body.status,
+        shippingCost: req.body.shippingCost,
+        finalPrice: req.body.finalPrice
+      })
+      .then(transaction => {
+        res
+          .status(201)
+          .json({
+            msg: "create success",
+            data: transaction
+          })
+      })
+      .catch(err => {
+        res
+          .status(400)
+          .json({
+            msg: "create failed",
+            err
+          })
+      })
+  }
+
+  static updateStatus(req, res) {
+    Transaction
+      .findOneAndUpdate({
+        userId: req.user._id
+      }, {
+          status: req.body.status
+        },
+        {
+          new: true
+        })
+      .then(transaction => {
+        res
+          .status(200)
+          .json({
+            msg: 'update success',
+            data: transaction
+          })
+      })
+      .catch(err => {
+        res
+          .status(400)
+          .json({
+            msg: 'update failed',
+            err
+          })
+      })
+  }
+
+  static findByUserId(req, res) {
+    Transaction
+      .findOne({ userId: req.user._id })
+      .then(transaction => {
+        res
+          .status(200)
+          .json({
+            msg: 'fetch success',
+            data: transaction
+          })
+      })
+      .catch(err => {
+        res
+          .status(404)
+          .json({
+            msg: 'Not Found',
+            err
+          })
+      })
+  }
+
+  static findByStatus(req, res) {
+    Transaction
+      .findOne({ status: req.body.status })
+      .then(transaction => {
+        res
+          .status(200)
+          .json({
+            msg: 'fetch success',
+            data: transaction
+          })
+      })
+      .catch(err => {
+        res
+          .status(404)
+          .json({
+            msg: 'Not Found',
+            err
+          })
+      })
+  }
+
+  static findAll(req, res) {
+    Transaction
+      .find()
+      .then(transactions => {
+        res
+          .status(200)
+          .json({
+            msg: 'fetch success',
+            data: transactions
+          })
+      })
+      .catch(err => {
+        res
+          .status(404)
+          .json({
+            msg: 'Not Found',
+            err
+          })
+      })
+  }
+
+  static addShippingCost(req, res) {
+    var query = {
+      city_name: {
+        $regex: '.*' + req.body.city_name + '.*',
+        $options: 'i'
+      }
+    }
+
+    var destinationId
+    console.log(RajaOngkirAPIKey)
+    Location
+      .find(query)
+      .then(locations => {
+        destinationId = locations[0].city_id
+        return axios
+          .post(
+            `https://api.rajaongkir.com/starter/cost`,
+            {
+              "origin": '153',
+              "destination": destinationId,
+              "weight": 1700,
+              "courier": req.body.courier
+            },
+            {
+              headers:
+                { key: RajaOngkirAPIKey }
+            }
+          )
+      })
+      .then(({ data }) => {
+        res
+          .json({
+            msg: 'success fetch data',
+            shippingCost: data.rajaongkir.results[0].costs[0].cost[0].value
+          })
+      })
+      .catch(err => {
+        res
+          .status(404)
+          .json({
+            msg: 'city not found',
+            err
+          })
+
+      })
+  }
+}
+
+module.exports = TransactionController
