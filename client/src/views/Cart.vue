@@ -147,7 +147,7 @@ export default {
           this.carts = data
         })
         .catch(err => {
-          if (err.response.data) {
+          if (err.response.data.msg) {
             alertify.error(`${err.response.data.msg}`)
           } else {
             alertify.error(`Ooops, something went wrong!`)
@@ -169,7 +169,7 @@ export default {
           })
         })
         .catch(err => {
-          if (err.response.data) {
+          if (err.response.data.msg) {
             alertify.error(`${err.response.data.msg}`)
           } else {
             alertify.error(`Ooops, something went wrong!`)
@@ -189,7 +189,7 @@ export default {
           this.carts = []
         })
         .catch(err => {
-          if (err.response.data) {
+          if (err.response.data.msg) {
             alertify.error(`${err.response.data.msg}`)
           } else {
             alertify.error(`Ooops, something went wrong!`)
@@ -274,7 +274,7 @@ export default {
           this.getCart()
         })
         .catch(err => {
-          if (err.response.data) {
+          if (err.response.data.msg) {
             alertify.error(`${err.response.data.msg}`)
           } else {
             console.log(err.response)

@@ -96,8 +96,8 @@ export default {
             alertify.error(`${err.response.data.msg}`)
           } else {
             alertify.error(`Ooops, something went wrong!`)
-            console.log(err.response)
           }
+          console.log(err.response)
         })
     },
     handleFileUpload () {

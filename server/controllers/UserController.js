@@ -55,7 +55,7 @@ class UserController {
         let password = req.body.password
         let address = req.body.address
         let phone = req.body.phone
-        let role = req.body.role
+        // let role = req.body.role
 
 
         if ( !name || !email || !password || !address) {

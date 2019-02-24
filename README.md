@@ -56,6 +56,6 @@ $ npm run dev
 ```
 And don't forget to fill the .env file 
 
-Link Server:
+Link Server: http://35.187.252.215/
 
-Link deploy: 
+Link deploy: http://comecom.veneciac.xyz/#/

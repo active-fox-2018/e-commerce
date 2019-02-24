@@ -193,12 +193,12 @@ export default {
           }
         })
         .catch(err => {
-          if (err.response.data) {
-            alertify.error(`${err.response.data.msg}`)
-          } else {
-            alertify.error(`Ooops, something went wrong!`)
-            console.log(err.response)
-          }
+          console.log(err.response)
+        //   if (err.response.data) {
+        //     alertify.error(`${err.response.data.msg}`)
+        //   } else {
+        //     alertify.error(`Ooops, something went wrong!`)
+        //   }
         })
     },
     recievedOne (id) {
@@ -213,7 +213,7 @@ export default {
           this.getTrans()
         })
         .catch(err => {
-          if (err.response.data) {
+          if (err.response.data.msg) {
             alertify.error(`${err.response.data.msg}`)
           } else {
             alertify.error(`Ooops, something went wrong!`)

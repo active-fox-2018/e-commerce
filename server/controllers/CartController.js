@@ -77,7 +77,7 @@ class CartController {
     }
 
     static findMyCart (req, res) {
-        Cart.find({ user: req.currentUser._id, checkout: false}).populate('product').populate('user').exec()
+        Cart.find({ user: req.currentUser._id, checkout: false }).populate('product').populate('user').exec()
             .then(data => {
                 res.status(200).json(data)
             })

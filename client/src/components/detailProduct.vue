@@ -223,15 +223,15 @@ export default {
     getProv () {
       server({
         method: 'get',
-        url: `/postal/province`,
+        url: `/postal/province`
       })
-      .then(({ data }) => {
-        this.optionsProv = data
-      })
-      .catch(err => {
-        alertify.error(`Ooopss something went wrong!`)
-        console.log(err.response)
-      })
+        .then(({ data }) => {
+          this.optionsProv = data
+        })
+        .catch(err => {
+          alertify.error(`Ooopss something went wrong!`)
+          console.log(err.response)
+        })
     },
     getCity (prov) {
       server({
@@ -255,14 +255,14 @@ export default {
           courier: this.service
         }
       })
-      .then(({ data }) => {
-        console.log(data[0])
-        this.cost = data[0]
-      })
-      .catch(err => {
-        alertify.error(`Ooopss something went wrong`)
-        console.log(err.response)
-      })
+        .then(({ data }) => {
+          console.log(data[0])
+          this.cost = data[0]
+        })
+        .catch(err => {
+          alertify.error(`Ooopss something went wrong`)
+          console.log(err.response)
+        })
     }
   },
   created () {
