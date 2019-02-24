@@ -5,8 +5,8 @@ const { verifyProduct, verifyUser, authUser, verifyCart, authAdmin } = require('
 
 route.use(verifyUser)
 route.get('/', CartController.findMyCart)
-route.get('/history', CartController.getHistory)//dah
 route.get('/:id', verifyCart, authUser, CartController.findOne)
+route.get('/history', CartController.getHistory)//dah
 
 route.post('/:id', verifyProduct, CartController.create) // IDNYA ID PRODUCT
 route.put('/:id/checkout', verifyCart, CartController.checkoutOne)

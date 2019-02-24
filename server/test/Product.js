@@ -15,8 +15,8 @@ var notMongooseId = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjNmFiNjJmND
 var productId = ''
 
 describe('PRODUCT', () => {
-
-    before( function (done) {
+    //entah kenapa not adminya g dapet??
+    beforeEach( function (done) {
         let newUser = {
             name: 'Admin',
             email: 'admin@mail.com',
@@ -47,13 +47,10 @@ describe('PRODUCT', () => {
             })
     })
 
-    after( function (done) {
-        User.deleteOne({ email: `admin@mail.com`})
+    afterEach( function (done) {
+        User.deleteMany()
             .then(data => {
-                User.deleteOne({ email: `user@mail.com`})
-                    .then(data => {
-                        done()
-                    })
+                done()
             })
     })
 
@@ -95,6 +92,7 @@ describe('PRODUCT', () => {
         })
 
         it('should return unauthorized', function (done) {
+            console.log(notAdmin)
             let product = {
                 name: 'test',
                 price: 1000
@@ -147,12 +145,113 @@ describe('PRODUCT', () => {
                     done()
                 })
         })
-
-
     })
 
     describe('Update', function (done) {
+        //1
+        it('should return You are not authorized', function (done) {
+            console.log(notAdmin)
+            console.log('===================')
+            chai.request(app)
+                .put(`/products/${productId}`)
+                .send({
+                    name: 'ubah'
+                })
+                .set({ token: notAdmin })
+                .end( (err, res) => {
+                    expect(err).to.be.null
+                    expect(res).to.have.status(401)
+            
+                    expect(res.body).to.have.property('msg')
+                    expect(res.body.msg).to.equal('Please login first')
+                    done()
+                })
+        })
 
+        //2
+        it('should return wrong product id', function (done) {
+            let id ='ass'
+            chai.request(app)
+                .put(`/products/${id}`)
+                .send({
+                    name: 'ubah'
+                })
+                .set({ token })
+                .end( (err, res) => {
+                    expect(err).to.be.null
+                    expect(res).to.have.status(400)
+            
+                    expect(res.body).to.have.property('msg')
+                    expect(res.body.msg).to.equal('Product id is not valid')
+                    done()
+                })
+        })
+
+        //3 
+        it('should return product not found', function (done) {
+            let id = `5c457e610444391c8b4359bd`
+            chai.request(app)
+                .put(`/products/${id}`)
+                .send({
+                    name: 'ubah'
+                })
+                .set({ token })
+                .end( (err, res) => {
+                    expect(err).to.be.null
+                    expect(res).to.have.status(404)
+                    expect(res.body).to.have.property('msg')
+                    expect(res.body.msg).to.equal('Product not found')
+                    done()
+                })
+        })
+
+        //4 
+        it('should return edited product', function (done) {
+            let id = productId
+            chai.request(app)
+                .put(`/products/${id}`)
+                .send({
+                    name: 'ubah'
+                })
+                .set({ token })
+                .end( (err, res) => {
+                    expect(err).to.be.null
+                    expect(res).to.have.status(200)
+                    done()
+                })
+        })
+
+        //5
+        it('should return edited price must be number', function (done) {
+            let id = productId
+            chai.request(app)
+                .put(`/products/${id}`)
+                .send({
+                    name: 'ubah',
+                    price: '22d'
+                })
+                .set({ token })
+                .end( (err, res) => {
+                    expect(err).to.be.null
+                    expect(res).to.have.status(400)
+            
+                    expect(res.body).to.have.property('msg')
+
+                    expect(res.body.msg).to.equal('Price must be number')
+                    done()
+                })
+        })
+    })
+
+
+    it('should return one product', function (done) {
+        chai.request(app)
+        .get(`/products/${productId}`)
+        .end( (err, res) => {
+            expect(err).to.be.null
+            expect(res).to.have.status(200)
+            done()
+        })
     })
 
     describe(`Delete`, () => {
@@ -177,5 +276,15 @@ describe('PRODUCT', () => {
                     done()
                 })
         })
+    })
+
+    it('should return all product', function (done) {
+        chai.request(app)
+            .get(`/products/`)
+            .end( (err, res) => {
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done()
+            })
     })
 })
