@@ -176,12 +176,18 @@ export default {
     deleteProduct (productId) {
       alertify.confirm('Confirm Delete Product', 'Are you sure want to delete this product ?', () => {
         relicApi
-          .delete(`/products/${productId}`)
+          .delete(`/products/${productId}`, {
+            headers: {
+              token: localStorage.token
+            }
+          })
           .then(({ data }) => {
+            alertify.success('Product Deleted!')
             this.$emit('delete-product', data)
             console.log(data)
           })
           .catch(err => {
+            alertify.success('Failed to Delete, Please Try Again!')
             console.log(err)
           })
       },

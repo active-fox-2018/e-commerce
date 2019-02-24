@@ -39,15 +39,6 @@ module.exports = {
             })
     },
     updateProduct: (req, res) => {
-        //validati controller pindahin middleware
-        // if(!req.body.name) {
-        //     res.status(404).json({msg: 'Product name cannot be empy'})
-        // } else if (!req.body.price) {
-        //     res.status(404).json({msg: 'Product price cannot be empy'})
-        // } else if (!req.params.id) {
-        //     res.status(404).json({msg: 'User not authenticate'})
-        // } else {
-            console.log(req.params.id, '====================')
             for(let key in req.body) {
                 if(!req.body[key]) delete req.body[key]
             }
@@ -65,23 +56,18 @@ module.exports = {
                 .catch(err => {
                     res.status(500).json(err.message)
                 })
-        // }
     },
     deleteProduct: (req, res) => {
-        if (!req.params.id) {
-            res.status(404).json({msg: 'User not authenticate'})
-        } else {
-            Product
-                .findByIdAndDelete(req.params.id)
-                .then(deletedProduct => {
-                    res.status(200).json(deletedProduct)
+        Product
+            .findByIdAndDelete(req.params.id)
+            .then(deletedProduct => {
+                res.status(200).json(deletedProduct)
+            })
+            .catch(err => {
+                res.status(500).json({
+                    msg: 'Internal Server Error',
+                    err: err.message
                 })
-                .catch(err => {
-                    res.status(500).json({
-                        msg: 'Internal Server Error',
-                        err: err.message
-                    })
-                })
-        }
+            })
     }
 }
