@@ -1,11 +1,13 @@
 const Cart = require('../models/cart')
 
-function authorizationForUserCart(req, res, nex) {
+function authorizationForUserCart(req, res, next) {
   Cart.findOne({
     _id :  req.params.id
   })
   .then(data => {
-    if(data && data.userId == req.userAuthentic._id) {
+    if(data && data.UserId == req.userAuthentic._id) {
+      next()
+    } else if(!data && req.params.id == undefined) {
       next()
     } else {
       throw '400'

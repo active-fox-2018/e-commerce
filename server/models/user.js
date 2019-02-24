@@ -11,14 +11,13 @@ const userSchema = new Schema({
     required: 'Email harus diisi',
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Contoh email : email@mail.com'],
     validate : {
-      isAsync : true,
-      validator : (value) => {
+      validator (value){
         return new Promise((resolve, reject) => {
           User.findOne({
             email : value
           })
           .then(user => {
-            if(user != undefined && user._id != this._id) {
+            if(user != undefined && String(user._id) !== String(this._id)) {
               throw err
             } else {
               resolve()

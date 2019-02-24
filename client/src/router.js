@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-Vue.use(BootstrapVue)
+import store from './store'
 Vue.use(Router)
 
 export default new Router({
@@ -14,17 +10,71 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: () => import('./views/Home.vue')
+      component: () => import(/* webpackChunkName: "home" */ './views/Home.vue')
     },
     {
-      path: '/products',
-      name: 'product',
-      component: () => import('./views/allproducts.vue')
-    },
-    {
-      path: '/account',
+      path: '/users',
       name: 'user',
-      component: () => import('./views/user.vue')
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "user" */ './views/userPage.vue'),
+      children: [
+        {
+          path: 'transactions',
+          name: 'transaction',
+          component: () => import(/* webpackChunkName: "transaction" */ './views/transaction.vue'),
+          beforeEnter: (to, from, next) => {
+            if (store.state.type === 'admin') {
+              next()
+            } else {
+              next({ name: 'user' })
+            }
+          }
+        }
+      ]
+    },
+    {
+      path: '/items',
+      name: 'items',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "item" */ './views/item.vue'),
+      children: [
+        {
+          path: 'create',
+          name: 'editItem',
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () => import(/* webpackChunkName: "item" */ './views/createItem.vue'),
+          beforeEnter: (to, from, next) => {
+            if (store.state.type === 'admin') {
+              next()
+            } else {
+              next({ name: 'items' })
+            }
+          }
+        }
+      ]
+    },
+    {
+      path: '/shopping',
+      name: 'shopping',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "item" */ './views/Cart.vue'),
+      beforeEnter: (to, from, next) => {
+        store.dispatch('getAllData')
+        if (localStorage.getItem('token')) {
+          next()
+        } else {
+          next({ name: 'home' })
+        }
+      }
+      
     }
   ]
 })

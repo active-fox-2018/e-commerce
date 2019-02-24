@@ -9,7 +9,7 @@ const transactionSchema = new Schema({
     enum : ['incomplete', 'paid' ,'confirmed']
   },
   CartId : [{ type : Schema.Types.ObjectId, ref :'Cart'}],
-  UserID :  { type : Schema.Types.ObjectId, ref :'User'},
+  UserId :  { type : Schema.Types.ObjectId, ref :'User'},
   created_at : Date,
   updated_at : Date
   })

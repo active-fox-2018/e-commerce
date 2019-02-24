@@ -3,11 +3,23 @@ const Cart = require('../models/cart')
 const Item = require('../models/item')
 const Transaction = require('../models/transaction')
 const compareHash = require('../helpers/compareHash')
-const getTotalPrice = require('../helpers/getTotalPrice')
 const jwt = require('jsonwebtoken')
 
 
 class ControllerUser {
+
+  static findOne(req, res) {
+    User.findOne({
+      _id: req.userAuthentic._id
+    })
+    .then(user => {
+      res.status(200).json({user})
+    })
+    .catch(err => {
+      res.status(500).json({err : err.message})
+    })
+  }
+
 
   static register(req, res) {
     User.create({
@@ -17,7 +29,21 @@ class ControllerUser {
       type : 'customer',
     })
     .then(user => {
-      console.log('dari controller', user)
+      res.status(201).json({user})
+    })
+    .catch(err => {
+      res.status(500).json({err : err.message})
+    })
+  }
+
+  static registerAdmin(req, res) {
+    User.create({
+      name : req.body.name,
+      email : req.body.email,
+      password : req.body.password,
+      type : 'admin',
+    })
+    .then(user => {
       res.status(201).json({user})
     })
     .catch(err => {
@@ -26,7 +52,21 @@ class ControllerUser {
   }
 
   static update(req, res) {
-    
+    User.findOne({
+      _id: req.userAuthentic._id,
+    })
+    .then(user => {
+      for(let key in req.body) {
+        user.set(key, req.body[key])
+      }
+      return user.save()
+    })
+    .then(user => {
+      res.status(200).json({user})
+    })
+    .catch(err => {
+      res.status(500).json({err : err.message})
+    })
   }
 
   static login(req, res) {
@@ -48,7 +88,7 @@ class ControllerUser {
         const token = jwt.sign({
           _id : userFound._id
         }, process.env.SECRET_JWT, {expiresIn : '1h'})
-        res.status(200).json({token})
+        res.status(200).json({token, email: userFound.email, name: userFound.name, type: userFound.type})
       } else {
         throw '404'
       }
@@ -62,18 +102,34 @@ class ControllerUser {
     })
   }
 
+  static findCartByUser(req, res) {
+    Cart.find({
+      UserId: req.userAuthentic._id,
+      CheckOut : false
+    }).populate('item')
+    .then(carts => {
+      console.log(carts)
+      res.status(200).json({carts})
+    })
+    .catch(err => {
+      res.status(500).json({err : err.message})
+    })
+  }
+
 
   static addToCart(req, res) {
     Cart.findOne({
       item : req.body.item
-    })
+    }).populate('item')
     .then(cart => {
       if(cart) {
-        return cart.update({
-          item : req.body.item + cart.item
-        }, {
-          new : true
-        })
+        if(cart.item.stock >= req.body.quantity){
+            return cart.update({
+              quantity : req.body.quantity
+            })
+          } else {
+            throw '400'
+          }
       } else {
         return Cart.create({
           UserId : req.userAuthentic._id,
@@ -86,7 +142,11 @@ class ControllerUser {
       res.status(201).json({cart})
     })
     .catch(err => {
-      res.status(500).json({err : err.message})
+      if(err == '400') {
+        res.status(400).json({err : 'out of stock'})
+      } else {
+        res.status(500).json({err : err.message})
+      }
     })
   }
 
@@ -96,9 +156,10 @@ class ControllerUser {
       UserId : req.userAuthentic._id,
     })
     .then(cart => {
-      res.status(201).cart({cart})
+      res.status(201).json({cart})
     })
     .catch(err => {
+      console.log(err)
       res.status(500).json({err : err.message})
     })
   }
@@ -111,22 +172,25 @@ class ControllerUser {
       CheckOut : false
     }).populate('item')
     .then(carts => {
-      let updateStock = []
+      let updateAll = []
       carts.forEach(cart => {
         total += cart.item.price * cart.quantity
         cartsId.push(cart._id)
-        updateStock.push(cart.item.update({
+        updateAll.push(cart.item.update({
           stock : cart.item.stock - cart.quantity
         }))
+        updateAll.push(cart.update({
+          CheckOut : true
+        }))
       })
-      return Promise.all(updateStock)
+      return Promise.all(updateAll)
     })
     .then(data => {
       return Transaction.create({
         totalPrice : total,
         status : 'incomplete',
         CartId : cartsId,
-        UserID : req.userAuthentic.id,
+        UserId : req.userAuthentic._id,
         created_at : new Date(),
         updated_at : new Date()
       })
@@ -135,17 +199,44 @@ class ControllerUser {
       res.status(201).json(transaction)
     })
     .catch(err => {
-      console.log(err)
       res.status(500).json({err : err.message})
     })
   }
 
-  static paidTransaction(req, res) {
-    // Transaction.find
+  static findTransactionUser(req, res) {
+    Transaction.find({
+      UserId : req.userAuthentic._id
+    })
+    .populate({
+      path: 'CartId',
+      populate: {
+        path: 'item'
+      }
+    })
+    .then(transaction => {
+      res.status(200).json(transaction)
+    })
+    .catch(err => {
+      res.status(500).json({err : err.message})
+    })
   }
 
-  static confirmedTransaction(req, res) {
-
+  static updateStatusTransaction(req, res) {
+    Transaction.findOneAndUpdate( {
+      _id : req.params.id
+    }, {
+      $set : {
+        status : req.params.status
+      }
+    }, {
+      new : true
+    })
+    .then(transaction => {
+      res.status(200).json(transaction)
+    })
+    .catch(err => {
+      res.status(500).json({err : err.message})
+    })
   }
 }
 

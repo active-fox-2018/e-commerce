@@ -1,11 +1,11 @@
 const User = require('../models/user')
 
-function authorizationAdminOnly(req, res, nex) {
+function authorizationAdminOnly(req, res, next) {
   User.findOne({
       _id: req.userAuthentic._id
     })
     .then(user => {
-      if (user.type == 'admin') {
+      if (user && user.type == 'admin') {
         next()
       } else {
         throw '400'

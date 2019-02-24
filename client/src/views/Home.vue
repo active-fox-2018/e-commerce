@@ -1,21 +1,27 @@
 <template>
-  <div class="home">
-    <h1>HOME</h1>
-    <banner/>
-    <product/>
+  <v-container>
+  <parallax class="mb-5"/>
+  <carousels/>
+  <boxitems class="mt-4"/>
+  </v-container>
 
-  </div>
 </template>
 
 <script>
-
-import banner from '@/components/banner.vue'
-import product from '@/components/product.vue'
+import carousels from '@/components/carousels.vue'
+import parallax from '@/components/parallax.vue'
+import boxitems from '@/components/items.vue'
 export default {
   name: 'home',
   components: {
-    banner,
-    product
+    carousels,
+    parallax,
+    boxitems
+  },
+  data () {
+    return {
+
+    }
   }
 }
 </script>
