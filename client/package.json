@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "alertifyjs": "^1.11.2",
+    "async_hooks": "^1.0.0",
     "axios": "^0.18.0",
     "vue": "^2.5.22",
     "vue-router": "^3.0.1"

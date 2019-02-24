@@ -181,19 +181,19 @@ export default {
           token: localStorage.token
         }
       })
-      .then(({ data }) => {
-        this.name = data.name
-        this.description = data.description
-        this.price = data.price
-        this.stock = data.stock
-        this.category = data.category
-        this.images = data.images
-        console.log(data)
-        this.update = true
-        localStorage.setItem('productId', data._id)
-      }).catch((err) => {
-        console.log(err)
-      });
+        .then(({ data }) => {
+          this.name = data.name
+          this.description = data.description
+          this.price = data.price
+          this.stock = data.stock
+          this.category = data.category
+          this.images = data.images
+          console.log(data)
+          this.update = true
+          localStorage.setItem('productId', data._id)
+        }).catch((err) => {
+          console.log(err)
+        })
     },
     updateProduct () {
       let formData = new FormData()
@@ -205,10 +205,10 @@ export default {
       formData.append('image', this.file)
       relicApi
         .put(`/products/${localStorage.productId}`, formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data',
-                  token: localStorage.token
-                }
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            token: localStorage.token
+          }
         })
         .then(({ data }) => {
           this.update = false
@@ -217,7 +217,7 @@ export default {
         })
         .catch((err) => {
           console.log(err)
-        });
+        })
     }
   }
 }

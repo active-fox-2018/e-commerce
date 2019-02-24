@@ -14,7 +14,7 @@
 import LoopingCard from '@/components/LoopingCard.vue'
 export default {
   data () {
-    return  {
+    return {
       details: false
     }
   },
@@ -23,10 +23,10 @@ export default {
   },
   props: ['searcedProducts'],
   methods: {
-    addCart(payload) {
-      this.$emit("add-cart", payload);
+    addCart (payload) {
+      this.$emit('add-cart', payload)
     },
-    showDetails() {
+    showDetails () {
       this.details = true
       // this.$emit("show-details");
     },

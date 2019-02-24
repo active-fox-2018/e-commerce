@@ -2,6 +2,14 @@ const Product = require('../models/Product')
 
 module.exports = {
     createProduct : (req, res) => {
+        console.log(req.body)
+        if(!req.body.name) {
+            res.status(404).json({msg: 'Product name cannot be empy'})
+        } else if (!req.body.price) {
+            res.status(404).json({msg: 'Product price cannot be empy'})
+        } else if (!req.params.id) {
+            res.status(404).json({msg: 'User not authenticate'})
+        } else {
         let newProduct = { name, description, price, category } = req.body
         if(!req.file) {
             newProduct.img = null
@@ -16,6 +24,7 @@ module.exports = {
             .catch(err => {
                 res.status(500).json(err)
             })
+        }
     },
     findAllProduct: (req, res) => {
         Product
@@ -63,7 +72,6 @@ module.exports = {
                     res.status(200).json(updatedProduct)
                 })
                 .catch(err => {
-                    console.log(err)
                     res.status(500).json(err.message)
                 })
         // }
@@ -78,7 +86,6 @@ module.exports = {
                     res.status(200).json(deletedProduct)
                 })
                 .catch(err => {
-                    // console.log(err.message)
                     res.status(500).json({
                         msg: 'Internal Server Error',
                         err: err.message

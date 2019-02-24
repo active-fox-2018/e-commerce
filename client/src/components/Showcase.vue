@@ -28,14 +28,14 @@ export default {
   },
   props: ['products', 'details'],
   methods: {
-    addCart(payload) {
+    addCart (payload) {
       this.$emit('add-cart', payload)
     },
-    showDetails() {
+    showDetails () {
       this.$emit('show-details')
     }
   }
-};
+}
 </script>
 
 <style>

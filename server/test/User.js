@@ -19,11 +19,10 @@ describe('Customer Authentication', function() {
     
             chai
                 .request(app)
-                .post('/users')
+                .post('/register')
                 .send(newUser)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
                     expect(res).to.have.status(500)
                     done()
                 })
@@ -37,11 +36,10 @@ describe('Customer Authentication', function() {
     
             chai
                 .request(app)
-                .post('/users')
+                .post('/register')
                 .send(newUser)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
                     expect(res).to.have.status(500)
                     done()
                 })
@@ -56,11 +54,10 @@ describe('Customer Authentication', function() {
     
             chai
                 .request(app)
-                .post('/users')
+                .post('/register')
                 .send(newUser)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
                     expect(res).to.have.status(500)
                     done()
                 })
@@ -75,11 +72,10 @@ describe('Customer Authentication', function() {
     
             chai
                 .request(app)
-                .post('/users')
+                .post('/register')
                 .send(newUser)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
                     expect(res).to.have.status(500)
                     done()
                 })
@@ -93,11 +89,10 @@ describe('Customer Authentication', function() {
     
             chai
                 .request(app)
-                .post('/users')
+                .post('/register')
                 .send(newUser)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
                     expect(res).to.have.status(500)
                     done()
                 })
@@ -112,11 +107,10 @@ describe('Customer Authentication', function() {
     
             chai
                 .request(app)
-                .post('/users')
+                .post('/register')
                 .send(newUser)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
                     expect(res).to.have.status(500)
                     done()
                 })
@@ -130,11 +124,10 @@ describe('Customer Authentication', function() {
     
             chai
                 .request(app)
-                .post('/users')
+                .post('/register')
                 .send(newUser)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
                     expect(res).to.have.status(500)
                     done()
                 })
@@ -142,7 +135,7 @@ describe('Customer Authentication', function() {
     })
 
     describe('Failed Login', function() {
-        it('Should return 400 if user not input email address', function(done) {
+        it('Should return 500 if user not input email address', function(done) {
             let loginData = {
                 password: '12345'
             }
@@ -153,11 +146,8 @@ describe('Customer Authentication', function() {
                 .send(loginData)
                 .end(function(err, res) {
                     expect(err).to.be.null
-
-                    expect(res).to.have.status(400)
-                    expect(res.body).to.be.a('object')
-                    expect(res.body).to.have.property('msg')
-                    expect(res.body.msg).to.have.string('Please fill in all the form')
+                    expect(res).to.have.status(500)
+                    expect(res.body).to.be.an('array')
                     done()
                 })
         })
@@ -172,11 +162,8 @@ describe('Customer Authentication', function() {
                 .send(loginData)
                 .end(function(err, res) {
                     expect(err).to.be.null
-
-                    expect(res).to.have.status(400)
-                    expect(res.body).to.be.a('object')
-                    expect(res.body).to.have.property('msg')
-                    expect(res.body.msg).to.have.string('Please fill in all the form')
+                    expect(res).to.have.status(500)
+                    expect(res.body).to.be.an('array')
                     done()
                 })
         })
@@ -192,12 +179,8 @@ describe('Customer Authentication', function() {
                 .send(loginData)
                 .end(function(err, res) {
                     expect(err).to.be.null
-                    console.log(err)
-                    console.log(res.body)
-                    expect(res).to.have.status(400)
-                    expect(res.body).to.be.a('object')
-                    expect(res.body).to.have.property('msg')
-                    expect(res.body.msg).to.have.string('Email/password is wrong!')
+                    expect(res).to.have.status(500)
+                    expect(res.body).to.be.an('array')
                     done()
                 })
         })
@@ -213,11 +196,8 @@ describe('Customer Authentication', function() {
                 .send(loginData)
                 .end(function(err, res) {
                     expect(err).to.be.null
-
-                    expect(res).to.have.status(400)
-                    expect(res.body).to.be.a('object')
-                    expect(res.body).to.have.property('msg')
-                    expect(res.body.msg).to.have.string('Email/password is wrong!')
+                    expect(res).to.have.status(500)
+                    expect(res.body).to.be.an('array')
                     done()
                 })
         })
@@ -233,11 +213,8 @@ describe('Customer Authentication', function() {
                 .send(loginData)
                 .end(function(err, res) {
                     expect(err).to.be.null
-
-                    expect(res).to.have.status(400)
-                    // expect(res.body).to.be.a('object')
-                    // expect(res.body).to.have.property('msg')
-                    // expect(res.body.msg).to.have.string('Email format is wrong!')
+                    expect(res).to.have.status(500)
+                    expect(res.body).to.be.an('array')
                     done()
                 })
         })
@@ -253,11 +230,8 @@ describe('Customer Authentication', function() {
                 .send(loginData)
                 .end(function(err, res) {
                     expect(err).to.be.null
-
-                    expect(res).to.have.status(400)
-                    // expect(res.body).to.be.a('object')
-                    // expect(res.body).to.have.property('msg')
-                    // expect(res.body.msg).to.have.string('Email format is wrong!')
+                    expect(res).to.have.status(500)
+                    expect(res.body).to.be.an('array')
                     done()
                 })
         })
@@ -278,15 +252,15 @@ describe('Customer Authentication', function() {
 
         it('Should create new user', function(done) {
             let newUser = {
-                name: 'jan',
-                email: 'jan@mail.com',
+                name: 'testing',
+                email: 'testing@mail.com',
                 password: '12345678',
                 address: 'jakarta'
             }
     
             chai
                 .request(app)
-                .post('/users')
+                .post('/register')
                 .send(newUser)
                 .end(function(err, res) {
                     expect(err).to.be.null
@@ -300,8 +274,8 @@ describe('Customer Authentication', function() {
     
         it('should return token when user successfully login', function(done) {
             let loginInput = {
-                email: 'jan@mail.com',
-                password: '123'
+                email: 'testing@mail.com',
+                password: '12345678'
             }
     
             chai
@@ -310,7 +284,7 @@ describe('Customer Authentication', function() {
                 .send(loginInput)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
+                    console.log(res.body, '========== testing')
                     expect(res).to.have.status(200)
                     expect(res.body).to.have.property('token')
                     done()

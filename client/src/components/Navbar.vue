@@ -5,9 +5,7 @@
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="addon-wrapping" style="background:orange">
-              <button type="submit" class="buttonTrans" style="height:5vh;width:3vw">
                 <i style="font-size:24px;color:black" class="fas">&#xf002;</i>
-              </button>
             </span>
           </div>
           <input
@@ -108,27 +106,28 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       email: '',
       password: '',
       keyword: ''
-    };
+    }
   },
-  props: ["url", "carts", "isLogin", "isAdmin", "isBuyer"],
+  props: ['url', 'carts', 'isLogin', 'isAdmin', 'isBuyer'],
   methods: {
-    loginUser() {
+    loginUser () {
       let data = {
         email: this.email,
         password: this.password
-      };
-      this.$emit("login-user", data);
+      }
+      this.$emit('login-user', data)
     },
-    logOut() {
-      localStorage.clear();
-      this.$emit("log-out");
+    logOut () {
+      localStorage.clear()
+      this.$emit('log-out')
     },
     search () {
+      this.keyword = ''
       this.$emit('search-product', this.keyword)
     },
     filter (input) {
@@ -136,12 +135,12 @@ export default {
     }
   },
   watch: {
-    isLogin() {
-      this.email = "";
-      this.password = "";
+    isLogin () {
+      this.email = ''
+      this.password = ''
     }
   }
-};
+}
 </script>
 
 <style>

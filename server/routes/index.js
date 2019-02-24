@@ -1,11 +1,10 @@
-const user = require('./users')
 const product = require('./product')
 const cart = require('./cart')
 const shipping = require('./shipping')
 const transaction = require('./transaction')
-
-const { loginUser } = require('../controllers/userController')
-// const userAuth = require('../middlewares/userAuth')
+const userAuth = require('../middlewares/userAuth')
+const { registerUser, loginUser } = require('../controllers/userController')
+const { errHandling } = require('../middlewares/error')
 
 var express = require('express');
 var router = express.Router();
@@ -16,12 +15,12 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.use('/users', user)
 router.use('/products', product)
-router.use('/carts', cart)
+router.use('/carts', userAuth, cart)
 router.use('/shippings', shipping)
 router.use('/transactions', transaction)
 
-router.post('/login', loginUser)
+router.post('/register', registerUser, errHandling)
+router.post('/login', loginUser, errHandling)
 
 module.exports = router;

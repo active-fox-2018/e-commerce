@@ -118,7 +118,7 @@ export default {
       cart: true,
       shippingCost: null,
       edit: false,
-      qty: Number,
+      qty: Number
     }
   },
   props: ['carts'],
@@ -133,7 +133,8 @@ export default {
         .then(({ data }) => {
           alertify.success('Item Removed')
           this.$emit('remove-cart-item', data)
-        }).catch((err) => {
+        })
+        .catch(err => {
           alertify.error('Please Try Again!')
         })
     },
@@ -148,7 +149,7 @@ export default {
       this.$emit('empty-cart')
     },
     editQty () {
-      if(this.edit) {
+      if (this.edit) {
         this.edit = false
       } else {
         this.edit = true
@@ -166,15 +167,15 @@ export default {
           productId: productId
         }
       })
-      .then(({ data }) => {
-        console.log(data)
-        this.edit = false
-        this.$emit('update-cart', data)
-      })
-      .catch((err) => {
-        console.log(err.response)
-        alertify.error('Failed to Update, Please Try Again!')
-      });
+        .then(({ data }) => {
+          console.log(data)
+          this.edit = false
+          this.$emit('update-cart', data)
+        })
+        .catch((err) => {
+          console.log(err.response)
+          alertify.error('Failed to Update, Please Try Again!')
+        })
     }
   },
   computed: {
@@ -185,7 +186,7 @@ export default {
       })
       return subTotal
     }
-  },
+  }
 }
 </script>
 

@@ -38,16 +38,16 @@
 export default {
   props: ['products'],
   methods: {
-    addToCart(productId) {
+    addToCart (productId) {
       let data = {
         userId: localStorage.userId,
         productId: productId,
         qty: 1
-      };
-      this.$emit("add-cart", data);
+      }
+      this.$emit('add-cart', data)
     },
-    showDetails() {
-      this.$emit("show-details");
+    showDetails () {
+      this.$emit('show-details')
     }
   }
 }

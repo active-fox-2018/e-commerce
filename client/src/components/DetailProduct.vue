@@ -72,12 +72,12 @@ export default {
       this.$emit('add-cart', data)
     },
     minStock () {
-      if(this.qty !== 0) {
+      if (this.qty !== 0) {
         this.qty--
       }
     },
     plusStock () {
-      if(this.qty < this.details.stock) {
+      if (this.qty < this.details.stock) {
         this.qty++
       }
     },

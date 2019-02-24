@@ -13,8 +13,10 @@
       :carts="carts">
     </Navbar>
 
-    <div class="alert alert-danger" role="alert">
-        A simple danger alert—check it out!
+    <div v-if="alert">
+      <div v-for="(alert, index) in alertsMsg" :key="index" class="alert alert-danger" role="alert">
+        {{alert}}
+      </div>
     </div>
 
     <router-view
@@ -25,6 +27,8 @@
       @add-cart="addCart"
       @remove-cart-item="removeCartItem"
       @empty-cart="emptyCart"
+      @log-in="loginUser"
+      @alert-msg="alertMsg"
       :products="products"
       :productsCopy="productsCopy"
       :carts="carts"
@@ -45,7 +49,7 @@ import Navbar from '@/components/Navbar.vue'
 import relicApi from '@/api/index'
 import alertify from 'alertifyjs'
 import { log } from 'util'
-import { triggerAsyncId } from 'async_hooks';
+import { setTimeout } from 'timers'
 
 export default {
   name: 'home',
@@ -54,10 +58,12 @@ export default {
       products: [],
       productsCopy: [],
       carts: [],
+      searcedProducts: [],
       isLogin: false,
       isAdmin: false,
       isBuyer: false,
-      searcedProducts: []
+      alert: false,
+      alertsMsg: []
     }
   },
   components: {
@@ -77,7 +83,7 @@ export default {
           localStorage.setItem('token', data.token)
           localStorage.setItem('userId', data.id)
           localStorage.setItem('role', data.role)
-          if(data.role == 'admin') {
+          if (data.role == 'admin') {
             this.isLogin = true
             this.isAdmin = true
             this.$router.push('/transaction')
@@ -88,8 +94,13 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err.response)
-          console.log(err)
+          console.log(err.response.data)
+
+          this.alertsMsg = err.response.data
+          this.alert = true
+          setTimeout(() => {
+            this.alert = false
+          }, 3000)
         })
     },
     logOut () {
@@ -111,6 +122,13 @@ export default {
         this.isBuyer = false
       }
     },
+    alertMsg (payload) {
+      this.alertsMsg = payload
+      this.alert = true
+      setTimeout(() => {
+        this.alert = false
+      }, 3000)
+    },
     getProducts () {
       relicApi
         .get('/products')
@@ -127,7 +145,7 @@ export default {
     },
     updateProduct (payload) {
       let index = this.products.findIndex(el => {
-          return el._id == payload._id
+        return el._id == payload._id
       })
       this.products.splice(index, 1, payload)
     },
@@ -162,8 +180,9 @@ export default {
             this.carts.unshift(data)
           }
         }).catch((err) => {
-          if(!localStorage.token) {
+          if (!localStorage.token) {
             alertify.error('Please Login First!')
+            this.$router.push('/login')
           } else {
             alertify.error('Product is Out of Stock')
           }
@@ -193,7 +212,7 @@ export default {
     },
     updateCart (payload) {
       let index = this.carts.findIndex(el => {
-          return el._id == payload._id
+        return el._id == payload._id
       })
       this.carts.splice(index, 1, payload)
     },
@@ -205,7 +224,7 @@ export default {
     searchProduct (payload) {
       console.log(payload)
       let searchObj = [...this.products]
-      let regex = new RegExp('.*' + payload + '.*', "i")
+      let regex = new RegExp('.*' + payload + '.*', 'i')
       let searched = searchObj.filter(el => {
         return el.name.match(regex) || el.category.match(regex)
       })
@@ -217,7 +236,7 @@ export default {
   created () {
     this.checkLoginStatus()
     this.getProducts()
-    if(localStorage.token && localStorage.role == 'buyer') {
+    if (localStorage.token && localStorage.role === 'buyer') {
       this.getCarts()
     }
   }

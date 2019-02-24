@@ -9,7 +9,7 @@ chai.use(chaiHttp)
 
 describe('CRUD Product', function() {
     describe('Create', function() {
-        it('should return error 500 if user not input product name', function(done) {
+        it.only('should return error 500 if user not input product name', function(done) {
             let productData = {
                 description: 'Master Grade',
                 price: 500000,
@@ -21,8 +21,9 @@ describe('CRUD Product', function() {
                 .send(productData)
                 .end(function(err, res) {
                     expect(err).to.be.null
-    
-                    expect(res).to.have.status(500)
+                    console.log(res.body, '=== testing')
+                    expect(res).to.have.status(401)
+                    expect(res.body).to.be.a('object')
                     // property ada atau gak
                     // value ada atau gak
                     done()

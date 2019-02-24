@@ -1,19 +1,10 @@
 <template>
   <div class="container" style="text-align:left">
-    <h1>Register</h1>
+    <h1>Log In</h1>
     <div class="alert alert-secondary" role="alert" v-if="alert">
         {{alertMsg}}
     </div>
-    <form style="width:50%;" @submit.prevent="signUp()">
-      <div class="form-group">
-        <label for="exampleInputEmail1">Name</label>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Enter name"
-          v-model="name"
-        >
-      </div>
+    <form style="width:50%;" @submit.prevent="logIn()">
       <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
         <input
@@ -42,7 +33,6 @@
 </template>
 
 <script>
-import relicApi from '@/api/index'
 export default {
   data () {
     return {
@@ -54,25 +44,18 @@ export default {
     }
   },
   methods: {
-    signUp () {
-      relicApi({
-        url: '/register',
-        method: 'post',
-        data: {
-          name: this.name,
-          email: this.email,
-          password: this.password
-        }
-      })
-        .then(({ data }) => {
-          console.log(data)
-          this.$router.push('/')
-          this.alert = true
-          this.alertMsg = 'Thank You For Registering!'
-        }).catch((err) => {
-          this.$emit('alert-msg', err.response.data)
-          console.log(err.response.data)
-        })
+    data () {
+      return {
+        email: '',
+        password: ''
+      }
+    },
+    logIn () {
+      let data = {
+        email: this.email,
+        password: this.password
+      }
+      this.$emit('log-in', data)
     }
   }
 }

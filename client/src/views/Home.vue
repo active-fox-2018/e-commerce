@@ -37,6 +37,6 @@ export default {
     hideDetails () {
       this.details = false
     }
-  },
+  }
 }
 </script>

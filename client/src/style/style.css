@@ -160,3 +160,9 @@
     border-radius: 5px;
     font-weight: bold
   }
+
+  footer {
+    overflow: hidden;
+    color: orange;
+    background: black;
+  }
