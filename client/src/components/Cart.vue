@@ -7,8 +7,8 @@
             <h2 class="text-xs-left">Total Price: Rp {{totalPrice.toLocaleString()}}</h2>
           </v-flex>
           <v-flex xs3>
-            <v-btn large color="primary" @click.prevent="checkout" style='text-decoration:none;'>
-              <v-icon class="mr-2" >payment</v-icon>Buy Now
+            <v-btn large color="primary" @click.prevent="checkout" style="text-decoration:none;">
+              <v-icon class="mr-2">payment</v-icon>Buy Now
             </v-btn>
           </v-flex>
           <v-flex xs3>
@@ -33,7 +33,7 @@
               </v-card-title>
             </v-flex>
             <v-flex xs3>
-              <v-card-title primary-title class="pt-3"> 
+              <v-card-title primary-title class="pt-3">
                 <div>
                   <div
                     class="green--text headline"
@@ -43,7 +43,15 @@
               </v-card-title>
             </v-flex>
             <v-flex xs1>
-              <v-btn class="mt-4" icon small color="grey" @click.prevent="reduceItem(product.productId._id)"><v-icon class>close</v-icon></v-btn>
+              <v-btn
+                class="mt-4"
+                icon
+                small
+                color="grey"
+                @click.prevent="reduceItem(product.productId._id)"
+              >
+                <v-icon class>close</v-icon>
+              </v-btn>
             </v-flex>
           </v-layout>
         </v-card>
@@ -122,20 +130,36 @@ export default {
     },
     reduceItem(productId) {
       server
-        .put('/carts/reduceItem', {productId}, {
-          headers: {
-            token: localStorage.getItem('token')
+        .put(
+          "/carts/reduceItem",
+          { productId },
+          {
+            headers: {
+              token: localStorage.getItem("token")
+            }
           }
+        )
+        .then(({ data }) => {
+          this.getUserCart();
         })
-        .then(({data}) => {
-          this.getUserCart()
-        })
-        .catch(({response}) => {
-          console.error(response)
-        })
+        .catch(({ response }) => {
+          console.error(response);
+        });
     },
-    checkout(){
-      this.$router.push({path: '/checkout',name:"checkout", params:{cartId: this.carts._id, totalPrice: this.totalPrice}})
+    checkout() {
+      if (!localStorage.getItem("token")) {
+        swal("you have to login first!", {
+          buttons: ["continue browsing", "login now"]
+        }).then(value => {
+          if (value) this.$router.push("/authpage/register");
+        });
+      } else {
+        this.$router.push({
+          path: "/checkout",
+          name: "checkout",
+          params: { cartId: this.carts._id, totalPrice: this.totalPrice }
+        });
+      }
     }
   }
 };

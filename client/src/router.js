@@ -33,7 +33,15 @@ export default new Router({
         path: 'checkout',
         name: 'checkout',
         component: () => import('./components/Checkout.vue')
-      }]
+      }, {
+        path: 'transactions',
+        name: 'transactions',
+        component: () => import('./components/Transactions.vue')
+      }, {
+        path: 'alltransactions',
+        name: 'alltransactions',
+        component: () => import('./components/AllTransactions.vue')
+      }], 
     },
     {
       path: '/authpage',

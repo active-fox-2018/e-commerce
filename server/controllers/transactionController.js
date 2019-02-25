@@ -37,20 +37,29 @@ class TransactionController {
   static updateStatus(req, res) {
     Transaction
       .findOneAndUpdate({
-        userId: req.user._id
-      }, {
+        _id: req.params.id
+        },{
           status: req.body.status
         },
         {
           new: true
         })
       .then(transaction => {
-        res
-          .status(200)
+        if(!transaction){
+          res
+          .status(401)
           .json({
-            msg: 'update success',
-            data: transaction
+            msg: 'not found',
+            err
           })
+        } else {
+          res
+            .status(200)
+            .json({
+              msg: 'update success',
+              data: transaction
+            })
+        }
       })
       .catch(err => {
         res
@@ -64,7 +73,7 @@ class TransactionController {
 
   static findByUserId(req, res) {
     Transaction
-      .findOne({ userId: req.user._id })
+      .find({ userId: req.user._id })
       .then(transaction => {
         res
           .status(200)
@@ -107,6 +116,7 @@ class TransactionController {
   static findAll(req, res) {
     Transaction
       .find()
+      .populate('userId')
       .then(transactions => {
         res
           .status(200)

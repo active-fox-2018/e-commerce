@@ -32,7 +32,10 @@
         </v-flex>
         <v-container>
           <v-layout align-center justify-content-center row>
-            <v-flex xs6>
+            <v-flex v-if="isLoading">
+              <v-progress-circular indeterminate color="primary"></v-progress-circular>
+            </v-flex>
+            <v-flex xs6 v-else>
               <v-img v-if="imagePreviewURL" :src="imagePreviewURL"/>
             </v-flex>
           </v-layout>
@@ -57,16 +60,20 @@ export default {
       stock: 0,
       image: "",
       imagePreviewURL: "",
-      errors: {}
+      errors: {},
+      isLoading: false
     };
   },
   methods: {
     uploadImage(e) {
+      this.isLoading = true
       let imageFile = e.target.files[0];
       this.imagePreviewURL = URL.createObjectURL(imageFile);
       this.image = this.$refs.imageRef.files[0];
+      this.isLoading = false
     },
     AddProduct() {
+      this.isLoading = true
       var body = {
         name: this.name,
         price: this.price,
@@ -86,6 +93,7 @@ export default {
           }
         })
         .then(({ data }) => {
+          this.isLoading = false
           swal(
             "Done!",
             "you're product has been succesfully posted",

@@ -1,8 +1,8 @@
 <template>
   <v-container fluid grid-list-sm fill-height>
     <v-layout row justify-start wrap>
-      <v-flex v-for="(product, index) in allProduct" :key="index" xs3>
-        <v-card height="100%" width="100%">
+      <v-flex class="mb-4" v-for="(product, index) in allProduct" :key="index" xs4>
+        <v-card height="100%" width="80%">
           <v-img :src="product.image" aspect-ratio="2"></v-img>
           <h3 class="headline mt-2 mb-0">{{product.name}}</h3>
           <div>Rp {{product.price.toLocaleString()}}</div>
@@ -114,28 +114,29 @@ export default {
       if (!localStorage.getItem("token")) {
         swal("you have to login first!", {
           buttons: ["continue browsing", "login now"]
-        }).then((value) => {
-          if(value) this.$router.push('/authpage/register')
-        })
-      }
-      server
-        .put(
-          "/carts/addToCart",
-          {
-            productId: product._id
-          },
-          {
-            headers: {
-              token: localStorage.getItem("token")
-            }
-          }
-        )
-        .then(({ data }) => {
-          this.$router.push({ path: "/cart" });
-        })
-        .catch(({ response }) => {
-          console.error(response);
+        }).then(value => {
+          if (value) this.$router.push("/authpage/register");
         });
+      } else {
+        server
+          .put(
+            "/carts/addToCart",
+            {
+              productId: product._id
+            },
+            {
+              headers: {
+                token: localStorage.getItem("token")
+              }
+            }
+          )
+          .then(({ data }) => {
+            this.$router.push({ path: "/cart" });
+          })
+          .catch(({ response }) => {
+            console.error(response);
+          });
+      }
     }
   }
 };

@@ -20,6 +20,7 @@ describe('transaction test', function () {
   var adminInfo = ""
   var userProduct = ""
   var userCart = ""
+  var transactionId = ""
 
   before(function (done) {
     clearUser(done)
@@ -114,6 +115,7 @@ describe('transaction test', function () {
         .send(body)
         .set('token', tokenUser)
         .end(function (err, res) {
+          transactionId = res.body.data._id
           expect(res).to.have.status(201)
           expect(res.body.data.userId.toString()).to.equal(userInfo._id.toString())
           expect(res.body.data.cartId).to.equal(body.cartId)
@@ -176,9 +178,9 @@ describe('transaction test', function () {
         .get(`/transactions/user`)
         .set('token', tokenUser)
         .end(function (err, res) {
-          // console.log('---------------',res.body)
+          console.log('---------------',res.body)
           expect(res).to.have.status(200)
-          expect(res.body.data.userId.toString()).to.equal(userInfo._id.toString())
+          // expect(res.body.data.userId.toString()).to.equal(userInfo._id.toString())
           done()
         })
     })
@@ -222,16 +224,16 @@ describe('transaction test', function () {
     })
   })
 
-  describe('PUT /transactions/status', function () {
+  describe('PUT /transactions/status/:id', function () {
     it('should return success update status', function (done) {
       chai
         .request(app)
-        .put('/transactions/status')
+        .put(`/transactions/status/${transactionId}`)
         .set('token', tokenUser)
-        .send({ status: 'completed' })
+        .send({ status: 'delivered' })
         .end(function (err, res) {
           expect(res).to.have.status(200)
-          expect(res.body.data.status).to.equal('completed')
+          expect(res.body.data.status).to.equal('delivered')
           done()
         })
     })
@@ -239,9 +241,9 @@ describe('transaction test', function () {
     it('should return unauthorized access', function (done) {
       chai
         .request(app)
-        .get(`/transactions/user`)
+        .get(`/transactions/status/${transactionId}`)
         .end(function (err, res) {
-          expect(res).to.have.status(400)
+          expect(res).to.have.status(404)
           done()
         })
     })

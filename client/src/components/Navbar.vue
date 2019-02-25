@@ -10,12 +10,12 @@
             <v-list-tile-title>Add a new Product</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click>
+        <v-list-tile :to="'/alltransactions'">
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Contact</v-list-tile-title>
+            <v-list-tile-title >All Transactions</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -26,9 +26,10 @@
         <v-toolbar-title>Minishop</v-toolbar-title>
       </v-btn>
       <v-spacer></v-spacer>
-        <v-btn style="text-decoration: none; " color="blue" :to="'/cart'">
-          <v-icon color="white">shopping_cart</v-icon>your cart
-        </v-btn>
+      <v-btn style="text-decoration: none; " color="blue" :to="'/cart'">
+        <v-icon color="white">shopping_cart</v-icon>your cart
+      </v-btn>
+      <v-btn style="text-decoration: none; " color="green" :to="'/transactions'">transactions</v-btn>
       <div v-if="userRole">
         <v-tooltip bottom>
           <template #activator="data">

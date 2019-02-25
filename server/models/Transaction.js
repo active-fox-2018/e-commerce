@@ -19,7 +19,11 @@ const TransactionSchema = new Schema({
     type: Number,
     default: 0
   },
-  finalPrice: Number
+  finalPrice: Number,
+  createdAt: {
+    type: Date,
+    default: new Date
+  }
 })
 
 const Transaction = mongoose.model('Transaction', TransactionSchema)
