@@ -1,0 +1,15 @@
+#signUp {
+    background-color: rgb(225, 226, 228);
+}
+
+body {
+    background-color: rgb(240, 240, 240)
+}
+.crop {
+    width: 285.75px;
+    height: 250px;
+    overflow: hidden;
+}
+/* .crop img {
+  margin: -20px 0px 25px -9px;
+} */
