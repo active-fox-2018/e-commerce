@@ -23,5 +23,6 @@
 ```bash
 npm install
 fill the env template
+node app.js
 
 ```
