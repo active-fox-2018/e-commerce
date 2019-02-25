@@ -105,7 +105,7 @@ export default {
       this.$router.push({ name: 'addProduct' })
     },
     new_product(payload) {
-      this.products.push(payload)
+      this.products.unshift(payload)
     },
     deleteProduct(payload) {
       let index = this.products.findIndex(e => e._id === payload._id)

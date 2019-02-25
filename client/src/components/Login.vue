@@ -19,6 +19,13 @@
 
 <script>
 import api from '@/api/server.js'
+import Swal from 'sweetalert2'
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
 
 export default {
   data: () => ({
@@ -35,19 +42,28 @@ export default {
         .post('/login', newUser)
         .then(({data}) => {
           localStorage.setItem('token', data.token)
+          Toast.fire({
+            type: 'success',
+            title: 'Login successfully'
+          })
           this.clear()
           this.$emit('logged_in')
-
           if (data.user.role === 'user') {
+            localStorage.setItem('role', 'user')
             this.$router.push({ name: "home" })
+            this.$emit('user')
           } else if (data.user.role === 'admin') {
             localStorage.setItem('role', 'admin')
             this.$emit('admin')
             this.$router.push({ name: "admin" })
           }
         })
-        .catch(err => {
-          console.log(err);
+        .catch(({response}) => {
+          Swal.fire({
+            type: 'error',
+            title: 'Oops...',
+            text: response.data.msg
+          })
         })
     },
     clear () {

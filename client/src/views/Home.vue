@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-lg>
     <v-layout row wrap>
-      <v-flex xs2 v-for="(product, i) in products" :key="i">
+      <v-flex xs2 v-for="(product, i) in searched" :key="i">
         <router-link :to="{ name: 'details', params: { id: product._id }}">
           <Card :product="product"/>
         </router-link>
@@ -22,7 +22,13 @@ export default {
   },
   data () {
     return {
-      products: []
+      products: [],
+      searched: []
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.search()
     }
   },
   created() {
@@ -34,12 +40,16 @@ export default {
         .get('/products')
         .then(({data}) => {
           this.products = data
+          this.search()
         })
         .catch(err => {
           console.log(err);
 
         })
     },
+    search() {
+      this.searched = this.products.filter(product => product.name.includes(this.$route.query.query || ''))
+    }
   },
 
 }

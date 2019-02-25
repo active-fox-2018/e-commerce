@@ -47,6 +47,7 @@
 import Vue from 'vue'
 import VeeValidate from 'vee-validate'
 import api from '@/api/server.js'
+import Swal from 'sweetalert2'
 
 Vue.use(VeeValidate)
 export default {
@@ -93,11 +94,20 @@ export default {
             api
               .post('/register', formData)
               .then(({data}) => {
+                Swal.fire({
+                  type: 'success',
+                  title: 'Yeah...',
+                  text: "Successfully register"
+                })
                 this.$router.push({ name: 'login' })
                 this.clear()
               })
-              .catch(err => {
-
+              .catch(({response}) => {
+                Swal.fire({
+                  type: 'error',
+                  title: 'Oops...',
+                  text: response.data.err.email.message
+                })
               })
           }
         })

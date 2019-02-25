@@ -43,6 +43,7 @@
 <script>
 import Card from '@/components/CardInCart'
 import api from '@/api/server.js'
+import Swal from 'sweetalert2'
 
 export default {
   components: {
@@ -59,15 +60,23 @@ export default {
   },
   methods: {
     getCart() {
-      api
-        .get('/carts', {headers: {token: localStorage.getItem('token')}})
-        .then(({data}) => {
-          this.carts = data
-          this.getTotalPrice()
+      if (localStorage.getItem('token')) {
+        api
+          .get('/carts', {headers: {token: localStorage.getItem('token')}})
+          .then(({data}) => {
+            this.carts = data
+            this.getTotalPrice()
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      } else {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: "Please login first"
         })
-        .catch(err => {
-          console.log(err);
-        })
+      }
     },
     getTotalPrice() {
       let result = 0

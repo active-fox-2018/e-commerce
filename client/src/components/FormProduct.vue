@@ -48,6 +48,13 @@
 import Vue from 'vue'
 import VeeValidate from 'vee-validate'
 import api from '@/api/server.js'
+import Swal from 'sweetalert2'
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
 
 Vue.use(VeeValidate)
 export default {
@@ -94,6 +101,10 @@ export default {
             api
               .post('/products', formData, { headers: {token: localStorage.getItem('token')} })
               .then(({data}) => {
+                Toast.fire({
+                  type: 'success',
+                  title: 'Success add product'
+                })
                 this.$router.push({ name: 'admin' })
                 this.$emit('new_product', data)
                 this.clear()

@@ -48,6 +48,7 @@
 
 <script>
 import api from "@/api/server.js";
+import Swal from 'sweetalert2'
 
 export default {
   data() {
@@ -85,7 +86,11 @@ export default {
             console.log(err);
           })
       } else {
-        console.log('you have to login first');
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: "Please login first"
+        })
       }
     }
   }

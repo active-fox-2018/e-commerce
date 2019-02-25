@@ -10,7 +10,9 @@
     </v-toolbar-title>
     <v-spacer/>
 
-    <v-text-field label="Search" append-icon="search"/>
+    <form @submit.prevent="search">
+      <v-text-field label="Search" append-icon="search" v-model="query"/>
+    </form>
     <v-spacer/>
 
     <router-link to="/carts">
@@ -22,7 +24,7 @@
       </v-btn>
     </router-link>
     <router-link to="/pendings">
-      <v-btn icon v-if="is_login">
+      <v-btn icon v-if="is_login && newRole !== 'admin'">
         <v-icon>notifications</v-icon>
       </v-btn>
     </router-link>
@@ -39,11 +41,20 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
+
 export default {
   props: ['is_login', 'role'],
   data() {
     return {
-      newRole: this.role
+      newRole: this.role,
+      query: ''
     };
   },
   mounted() {
@@ -51,12 +62,23 @@ export default {
   },
   methods: {
     logout() {
+      Toast.fire({
+        type: 'success',
+        title: 'Logout successfully'
+      })
       localStorage.removeItem('token')
       this.$router.push({ name: 'home' })
       this.$emit('logout')
     },
     checkRole() {
-    this.newRole = localStorage.getItem('role') || 'user'
+      this.newRole = localStorage.getItem('role') || 'user'
+    },
+    search() {
+      if (this.newRole === 'user') {
+        this.$router.push({ name: 'home', query: {query: this.query} })
+      } else {
+        this.$router.push({ name: 'admin', query: {query: this.query} })
+      }
     }
   },
 };

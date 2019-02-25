@@ -26,19 +26,37 @@
 
 <script>
 import api from '@/api/server.js'
+import Swal from 'sweetalert2'
 
 export default {
   props: ['product'],
   methods: {
     deleteItem() {
-      api
-        .delete(`/products/${this.product._id}`, { headers: { token: localStorage.getItem('token') } })
-        .then(({data}) => {
-          this.$emit('delete_product', data)
-        })
-        .catch(err => {
-          console.log(err);
-        })
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.value) {
+          api
+            .delete(`/products/${this.product._id}`, { headers: { token: localStorage.getItem('token') } })
+            .then(({data}) => {
+              Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              )
+              this.$emit('delete_product', data)
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        }
+      })
     }
   },
 };

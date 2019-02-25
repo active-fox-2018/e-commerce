@@ -3,7 +3,7 @@
     <Navbar :is_login="isLogin" :role="role" @logout="checkLogin"/>
 
     <v-content>
-      <router-view @logged_in="checkLogin" @admin="role = 'admin'"/>
+      <router-view @logged_in="checkLogin" @admin="role = 'admin'" @user="role = 'user'"/>
     </v-content>
     <Footer/>
   </v-app>
