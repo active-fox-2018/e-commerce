@@ -5,8 +5,9 @@ module.exports = {
     Product
       .create({
         productName: req.body.productName,
+        description: req.body.description,
         price: req.body.price,
-        stock: req.body.stock
+        stock: req.body.stock,
       })
       .then(data => {
         res.status(201).json({
@@ -15,7 +16,18 @@ module.exports = {
         });
       })
       .catch(error => {
-        res.status(500).json(error);
+        // console.log(error.errors, '===========>');
+        const errorMessage = error.errors
+
+        if (errorMessage.hasOwnProperty('productName')) {
+          res.status(400).json(errorMessage.productName.message);
+        } else if (errorMessage.hasOwnProperty('description')) {
+          res.status(400).json(errorMessage.description.message);
+        } else if (errorMessage.hasOwnProperty('price')) {
+          res.status(400).json(errorMessage.price.message);
+        } else if (errorMessage.hasOwnProperty('stock')) {
+          res.status(400).json(errorMessage.stock.message);
+        }
       });
   },
   findAllProduct: function (req, res) {
@@ -57,7 +69,15 @@ module.exports = {
         });
       })
       .catch(error => {
-        res.status(500).json(error);
+        console.log(error);
+        // const errorMessage = error.errors
+        // if (errorMessage.hasOwnProperty('productName')) {
+        //   res.status(400).json(errorMessage.productName.message);
+        // } else if (errorMessage.hasOwnProperty('price')) {
+        //   res.status(400).json(errorMessage.price.message);
+        // } else if (errorMessage.hasOwnProperty('stock')) {
+        //   res.status(400).json(errorMessage.stock.message);
+        // }
       });
   },
   deleteProduct: function (req, res) {
@@ -70,7 +90,7 @@ module.exports = {
         });
       })
       .catch(error => {
-        res.status(500).json(error);
+        res.status(500).json({error});
       });
   }
 };

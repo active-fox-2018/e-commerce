@@ -8,7 +8,7 @@ routes.get('/', (req, res) => {
 });
 
 routes.use('/products', productRoutes);
-routes.use('/', userRoutes);
+routes.use('/users', userRoutes);
 routes.use('/carts', cartRoutes);
 
 module.exports = routes;

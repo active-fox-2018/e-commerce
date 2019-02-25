@@ -4,11 +4,12 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
   register(req, res) {
+    // console.log(req.body);
     User
       .create({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
       })
       .then(user => {
         res.status(201).json({
@@ -17,7 +18,6 @@ module.exports = {
         })
       })
       .catch(error => {
-        // console.log(error.errors);
         var errorMessage = error.errors;
         if (errorMessage.hasOwnProperty('name')) {
           res.status(400).json(errorMessage.name.message);
@@ -40,16 +40,33 @@ module.exports = {
             const access_token = jwt.sign({ data }, process.env.SECRET);
             res.status(200).json({
               access_token,
-              message: 'Successfully login'
+              message: 'Successfully login!'
             })
           } else {
             res.status(404).json({
-              error: 'Wrong Password'
+              message: 'Wrong Password!'
             });
           }
         } else {
           res.status(404).json({
-            error: 'Email is not registered'
+            message: 'Email is not registered'
+          });
+        }
+      })
+      .catch(error => {
+        res.status(500).json(error);
+      });
+  },
+  checkUser(req, res) {
+    // console.log(req.headers);
+    User
+      .findById(req.auth_user._id).select('-password')
+      .then(data => {
+        if (data) {
+          res.status(200).json(data);
+        } else {
+          res.status(404).json({
+            message: 'You must login first!'
           });
         }
       })
@@ -57,5 +74,4 @@ module.exports = {
         res.status(500).json(error);
       });
   }
-
 };
