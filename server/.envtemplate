@@ -1,0 +1,5 @@
+SECRET_JWT=
+CLOUD_BUCKET=
+GCLOUD_PROJECT=
+KEYFILE_PATH= (keyfile.json from google cloud)
+PORT =
