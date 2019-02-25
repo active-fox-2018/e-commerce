@@ -119,7 +119,8 @@ class ControllerUser {
 
   static addToCart(req, res) {
     Cart.findOne({
-      item : req.body.item
+      item : req.body.item,
+      CheckOut: false
     }).populate('item')
     .then(cart => {
       if(cart) {

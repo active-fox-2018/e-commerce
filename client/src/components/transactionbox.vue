@@ -21,7 +21,6 @@
       </v-card-title>
 
     <v-flex xs7>
-
     </v-flex>
     </v-container>
   </v-card>
