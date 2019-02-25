@@ -14,9 +14,9 @@
           >{{new Date(product.createdAt).toLocaleDateString('en-UK', { year: 'numeric', month: 'long', day: 'numeric' })}}</p>
         </v-flex>
         <v-flex xs2>
-          <router-link :to="{name: 'editProduct', params: { productId: product._id }}">
+          <!-- <router-link :to="{name: 'editProduct', params: { productId: product._id }}">
             <v-btn color="green" dark small>edit</v-btn>
-          </router-link>
+          </router-link> -->
           <v-btn color="red" dark @click="deleteItem" small>delete</v-btn>
         </v-flex>
       </v-layout>

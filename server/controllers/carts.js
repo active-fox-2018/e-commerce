@@ -60,7 +60,5 @@ module.exports = {
                     err: err
                 })
             })
-        // cart.products = []
-        // cart.save()
     }
 }
