@@ -2,11 +2,16 @@ require('dotenv').config()
 
 const Transaction = require('../models/Transaction')
 const Location = require('../models/Location')
+const Product = require('../models/Product')
+const Cart = require('../models/Cart')
 const RajaOngkirAPIKey = process.env.RAJA_ONGKIR_KEY
 const axios = require('axios')
 
 class TransactionController {
   static create(req, res) {
+    var transaction
+    var quantity = []
+
     Transaction
       .create({
         userId: req.user._id,
@@ -17,6 +22,35 @@ class TransactionController {
         finalPrice: req.body.finalPrice
       })
       .then(transaction => {
+        transaction = transaction
+        return Cart
+        .findById(transaction.cartId)
+      })
+      .then(cart => {
+        var cartPromises = []
+        cart.products.forEach(product => {
+          quantity.push(product.quantity)
+          cartPromises.push(Product.findById(product.productId))
+        })
+        
+        return Promise
+        .all(cartPromises)
+        
+      })
+      .then(products => {
+        var productPromises = []
+        products.forEach((product, index) => {
+          product.stock -= quantity[index]
+          product.stock = product.stock<0 ? 0 : product.stock
+          product.bought += quantity[index]
+          product.bought = product.bought<0 ? 0 : product.bought
+          productPromises.push(product.save())
+        })
+
+        return Promise
+          .all(productPromises)
+      })
+      .then(() => {
         res
           .status(201)
           .json({
@@ -38,20 +72,20 @@ class TransactionController {
     Transaction
       .findOneAndUpdate({
         _id: req.params.id
-        },{
+      }, {
           status: req.body.status
         },
         {
           new: true
         })
       .then(transaction => {
-        if(!transaction){
+        if (!transaction) {
           res
-          .status(401)
-          .json({
-            msg: 'not found',
-            err
-          })
+            .status(401)
+            .json({
+              msg: 'not found',
+              err
+            })
         } else {
           res
             .status(200)

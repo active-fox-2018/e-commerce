@@ -13,6 +13,7 @@
                   <div class="display-2">{{product.name}}</div><br>
                   <div class="headline text-xs-left">Price: Rp {{product.price.toLocaleString()}}</div>
                   <div class="headline text-xs-left">Stock: {{product.stock}}</div>
+                  <div class="headline text-xs-left">Bought: {{product.bought}} times</div>
                 </div>
               </v-card-title>
             </v-flex>

@@ -18,6 +18,10 @@ const ProductSchema = new Schema({
     type: Number, 
     required: [true, "stock can't be empty"]
   },
+  bought: {
+    type: Number,
+    default: 0
+  },
   imagePreviewURL: {
     type: String
   },

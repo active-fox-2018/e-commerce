@@ -243,7 +243,7 @@ describe('transaction test', function () {
         .request(app)
         .get(`/transactions/status/${transactionId}`)
         .end(function (err, res) {
-          expect(res).to.have.status(404)
+          expect(res).to.have.status(400)
           done()
         })
     })
