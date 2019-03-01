@@ -1,4 +1,4 @@
-const { User, Cart } = require('../models')
+const { User } = require('../models')
 const { comparePass, sign, verify } = require('../helpers')
 
 module.exports = {

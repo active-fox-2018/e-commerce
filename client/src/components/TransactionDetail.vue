@@ -27,6 +27,13 @@
 
 <script>
 import api from '@/api/server.js'
+import Swal from 'sweetalert2'
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
 
 export default {
   props: ['transaction', 'status'],
@@ -40,6 +47,11 @@ export default {
         .put(`/transactions/${this.transaction._id}`, obj, { headers: { token: localStorage.getItem('token') } })
         .then(({data}) => {
           console.log(data);
+          Toast.fire({
+            type: 'success',
+            title: 'Products recived'
+          })
+          this.$emit('recived')
         })
         .catch(err => {
           console.log(err);

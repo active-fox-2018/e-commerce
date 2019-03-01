@@ -1,4 +1,4 @@
-const { Transaction } = require('../models')
+const { Transaction, Product } = require('../models')
 
 module.exports = {
     getCart(req, res) {
@@ -41,13 +41,20 @@ module.exports = {
     clearCart(req, res) {
         let userId = req.user._id
         let cart = req.userCart.products
-        let newTransaction = {
-            userId: userId,
-            products: cart,
-            total: req.body.total
-        }
-        Transaction
-            .create(newTransaction)
+        let promises = []
+        cart.forEach(e => {
+            console.log(e.productId._id);
+            promises.push(Product.findOneAndUpdate({_id: e.productId._id}, {$set: {stock: (e.productId.stock - e.qty)}}))
+        });
+        Promise.all(promises)
+            .then(() => {
+                let newTransaction = {
+                    userId: userId,
+                    products: cart,
+                    total: req.body.total
+                }
+                return Transaction.create(newTransaction)
+            })
             .then(transaction => {
                 req.userCart.products = []
                 req.userCart.save()

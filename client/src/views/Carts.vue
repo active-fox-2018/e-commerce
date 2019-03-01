@@ -44,6 +44,12 @@
 import Card from '@/components/CardInCart'
 import api from '@/api/server.js'
 import Swal from 'sweetalert2'
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
 
 export default {
   components: {
@@ -76,6 +82,7 @@ export default {
           title: 'Oops...',
           text: "Please login first"
         })
+        this.$router.push({name: 'login'})
       }
     },
     getTotalPrice() {
@@ -96,6 +103,10 @@ export default {
         .put(`/carts/checkout`, {total: this.totalPrice}, {headers: { token: localStorage.getItem('token') }})
         .then(({data}) => {
           console.log(data);
+          Toast.fire({
+            type: 'success',
+            title: 'Checkout successfully'
+          })
           this.carts = {}
         })
         .catch(err => {

@@ -13,15 +13,14 @@
             <v-flex>
               <v-card>
                 <v-card-text>
-                  <div class="display-1">{{product.name}}</div>
-                  <br>
+                  <p class="display-1">{{product.name}}</p>
                   <div
                     v-if="product.price"
                     class="headline red--text font-weight-medium"
                   >IDR. {{product.price.toLocaleString()}}</div>
                   <div>
                     <v-layout align-center>
-                      <v-btn fab dark small @click="count > 1? count--:count = 1" color="primary">
+                      <v-btn fab dark small @click="count--" color="primary">
                         <v-icon dark>remove</v-icon>
                       </v-btn>
                       <v-flex xs3>
@@ -32,9 +31,11 @@
                       </v-btn>
                     </v-layout>
                   </div>
+                  <div class="subheading text-xs-right">
+                    {{product.stock}} left
+                  </div>
                 </v-card-text>
-
-                <v-card-actions class="text-sm-center">
+                <v-card-actions>
                   <v-btn class="grey lighten-2" flat @click="addToCart">Add to Cart</v-btn>
                 </v-card-actions>
               </v-card>
@@ -49,6 +50,12 @@
 <script>
 import api from "@/api/server.js";
 import Swal from 'sweetalert2'
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
 
 export default {
   data() {
@@ -59,6 +66,12 @@ export default {
   },
   created() {
     this.getProduct();
+  },
+  watch: {
+    count() {
+      !this.count? this.count = 1:''
+      this.count > this.product.stock? this.count = this.product.stock:''
+    }
   },
   methods: {
     getProduct() {
@@ -80,7 +93,10 @@ export default {
         api
           .put('/carts/addProducts', obj, { headers: {token: localStorage.getItem('token')} })
           .then(({data}) => {
-            console.log('added to cart');
+            Toast.fire({
+              type: 'success',
+              title: 'Items added to youre cart'
+            })
           })
           .catch(err => {
             console.log(err);

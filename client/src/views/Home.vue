@@ -48,7 +48,7 @@ export default {
         })
     },
     search() {
-      this.searched = this.products.filter(product => product.name.includes(this.$route.query.query || ''))
+      this.searched = this.products.filter(product => product.name.toLowerCase().includes(this.$route.query.query || ''))
     }
   },
 

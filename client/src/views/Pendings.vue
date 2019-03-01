@@ -9,7 +9,7 @@
             <v-tab-item>
               <v-container grid-list-lg>
                 <v-layout column>
-                  <TransactionDetail v-for="(transaction, i) in pendings" :key="i" :transaction="transaction" :status="'pending'"/>
+                  <TransactionDetail v-for="(transaction, i) in pendings" :key="i" :transaction="transaction" :status="'pending'" @recived="getTransactions"/>
 
                 </v-layout>
               </v-container>
