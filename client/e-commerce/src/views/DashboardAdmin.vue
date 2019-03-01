@@ -1,14 +1,7 @@
 <template>
     <div>
         <NavbarAdmin :AllProducts="AllProducts" />
-        <!-- <div>
-            <LoginForm @admin-login="adminLogin"></LoginForm>
-        </div> -->
-        <!-- <div>
-            <AddProductForm v-if="productForm"></AddProductForm>
-        </div> -->
-        <!-- login dll -->
-        <router-view :AllProducts="AllProducts"/>
+        <router-view @refresh-products="refresh" @new-product="addProduct" :AllProductsInLibs="AllProducts"/>
     </div>
 </template>
 
@@ -23,6 +16,14 @@
         components: {
             NavbarAdmin
         },
+        methods: {
+            addProduct(payload) {
+                this.$emit('new-product', payload)
+            },
+            refresh() {
+                this.$emit('refresh-products')
+            }
+        }
     }
 </script>
 

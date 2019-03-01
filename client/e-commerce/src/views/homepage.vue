@@ -1,8 +1,8 @@
 <template>
     <div id="homepage">
-        <NavbarHomepage :cart-amount="amount"/>
+        <NavbarHomepage :login="isLogin" @change-login="changeIsLogin" />
         <!-- <BodyHomepage/> -->
-        <router-view @amount-cart="amountCart"/>
+        <router-view :loginStatus="isLogin" @change-login="changeIsLogin" />
     </div>
 </template>
 
@@ -16,13 +16,18 @@
         },
         data() {
             return {
-                amount : 0
+                amount: 0,
+                isLogin: false
             }
         },
         methods: {
-            amountCart(payload) {
-                this.amount = payload
-            },
+            // amountCart(payload) {
+            //     this.amount = payload
+            // },
+            changeIsLogin(status) {
+                console.log(status)
+                this.isLogin = status
+            }
         },
     }
 </script>

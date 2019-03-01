@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view :AllProducts="allProducts" />
+    <router-view @refresh-products="refresh" @new-product="newProduct" :AllProducts="allProducts" />
   </div>
 </template>
 
@@ -17,6 +17,10 @@
       }
     },
     methods: {
+      newProduct(payload) {
+        console.log(payload)
+        this.allProducts.unshift(payload)
+      },
       getAllProducts() {
         axios.get('/products')
         .then(({data}) => {
@@ -31,6 +35,9 @@
         .catch(err => {
             console.log(err)
         })
+      },
+      refresh() {
+        this.getAllProducts()
       }
     }
   }

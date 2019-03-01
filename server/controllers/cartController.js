@@ -31,7 +31,9 @@ class Controller {
         .then(cart => {
             // console.log(cart)
             cart.productId.push(req.params.productId)
-            cart.save()
+            return cart.save()
+        })
+        .then(() => {
             return Product.findById(req.params.productId)
         })
         .then(product => {
@@ -43,7 +45,7 @@ class Controller {
             })
         })
         .then(updateProd => {
-            console.log(updateProd)
+            res.status(200).json({msg: 'Success add product to cart'})
         })
         .catch(err => {
             console.log(err)
@@ -57,15 +59,11 @@ class Controller {
     }
 
     static reduceCartQuantity(req, res) {
-        // console.log('siniiii')
-        // console.log(req.decoded)
         Cart.findOne({
             userId: req.decoded.id
         }) 
         .then(cart => {
-            // console.log(cart)
             let indexToDelete = cart.productId.indexOf(req.params.productId)
-            // console.log(indexToDelete)
             cart.productId.splice(indexToDelete, 1)
             cart.save()
             return Product.findById(req.params.productId)
@@ -79,7 +77,7 @@ class Controller {
             })
         })
         .then(updateProd => {
-            console.log(updateProd)
+            res.status(200).json({msg: 'Success remove product to cart'})
         })
         .catch(err => {
             console.log(err)

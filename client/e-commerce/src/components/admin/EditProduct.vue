@@ -81,9 +81,11 @@
                             }
                         })
                         .then(() => {
+                            this.$router.replace('/admin/products-lib')
                             swal("Product has been updated!", {
                                 icon: "success",
                             });
+                            this.refresh()
                         })
                         .catch(err => {
                             console.log(err)
@@ -92,6 +94,9 @@
                         
                     }
                 });
+            },
+            refresh() {
+                this.$emit('refresh-products')
             }
         }
     }

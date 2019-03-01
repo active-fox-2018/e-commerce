@@ -66,13 +66,15 @@
                         access_token: localStorage.getItem('token')
                     },
                 })
-                .then(newProduct => {
+                .then(({data}) => {
                     // if (!newProduct) {
                     //     this.loading = true
                     // } else {
                     //     this.loading = false
                     //     swal('Product has been successfully added')
                     // }
+                    this.sendNewProduct(data)
+                    swal('Success creating a product')
                     this.$router.push({
                         name: 'allProducts'
                     })
@@ -83,6 +85,9 @@
                 .catch(err => {
                     console.log(err)
                 })
+            },
+            sendNewProduct(payload) {
+                this.$emit('new-product', payload)
             },
             getFile(e) {
                 this.file = e.target.files[0]

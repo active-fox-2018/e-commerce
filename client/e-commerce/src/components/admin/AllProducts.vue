@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="card my-5" v-for="product in AllProducts" :key="product.id">
+        <div class="card my-5" v-for="product in AllProductsInLibs" :key="product.id">
             <!-- {{product}} -->
             <img :src="product.imageUrl" class="container card-img-top my-5 mx-auto justify-content-center" style="max-height: 50%; max-width: 70%;" :alt="product.name">
             <div class="card-body">
@@ -19,7 +19,7 @@
     import EditProduct from '@/components/admin/EditProduct.vue'
 
     export default {
-        props: ['AllProducts'],
+        props: ['AllProductsInLibs'],
         created() {
             // console.log(this.$route.params)
         },
@@ -27,7 +27,7 @@
             AllProducts(val) {
                 axios.get('/products')
                 .then(({products}) => {
-                    this.AllProducts = products
+                    this.AllProductsInLibs = products
                 })
                 .catch(err => {
                     console.log(err)

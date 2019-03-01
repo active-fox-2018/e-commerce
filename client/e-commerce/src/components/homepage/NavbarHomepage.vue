@@ -18,33 +18,15 @@
                         <!-- <a class="nav-link" href="#">Shop</a> -->
                         <router-link class="nav-link" to="/shop">Shop </router-link>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Menu
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
                     <li class="nav-item active mx-auto">
-                        <!-- <a class="navbar-brand" href="#">P-nues</a> -->
-                        <router-link to="/" class="navbar-brand">Supadono</router-link>
+                        <router-link to="/" class="navbar-brand">Shopadono</router-link>
                     </li>
                 </ul>
-                <!-- <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form> -->
                 <router-link to="/cart" @amount-cart="amountToState" style="width: 10%; color: #fff;"><img src="https://img.icons8.com/plasticine/100/000000/shopping-cart.png" height="50px">{{ fAmount }}</router-link>
-                <!-- <a href="#" class="nav-link">Login</a> -->
-                <router-link to="/login" class="nav-link">Login</router-link>
-                <!-- <router-view></router-view> -->
+                <router-link to="/login" class="nav-link" v-if="!login">Login</router-link>
                 <a href="#"><img src="https://img.icons8.com/ultraviolet/40/000000/gender-neutral-user.png" height="20px"></a>
                 <div class="nav-item active ml-2">
-                    <a href="#" @click="logout">Logout</a>
+                    <a href="#" @click="logout" v-if="login">Logout</a>
                 </div>
             </div>
         </nav>
@@ -57,6 +39,7 @@
         props: {
             msg: String,
             cartAmount: Number,
+            login: Boolean
         },
         data() {
             return {
@@ -66,6 +49,7 @@
         methods: {
             logout() {
                 localStorage.removeItem('token')
+                this.changeIsLogin()
                 swal('Signing Out...')
                 this.$router.push({
                     name: '/'
@@ -73,6 +57,9 @@
             },
             amountToState(payload) {
                 this.amountInCart = payload
+            },
+            changeIsLogin() {
+                this.$emit('change-login', false)
             }
         },
         computed: {

@@ -35,6 +35,7 @@
 
     export default {
         name: 'login',
+        props: ['loginStatus'],
         data() {
             return {
                 password: '',
@@ -50,10 +51,15 @@
                 .then(({data}) => {
                     swal(`Welcome ${data.user}`, "", "success");
                     localStorage.setItem('token', data.token)
+                    this.changeLogin()
+                    this.$router.replace('/shop')
                 })
                 .catch(err => {
                     console.log(err)
                 })
+            },
+            changeLogin() {
+                this.$emit('change-login', true)
             }
         }
     }

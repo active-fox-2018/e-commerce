@@ -19,7 +19,6 @@ List of user routes:
 |/cart/:productId    |PUT   | access_token | none | Decrease user's cart quantity and remove the product
 |/cart    |DELETE   | access_token | none | Delete all products in cart
 
-
 # Usage
 
 Make sure you have Node.js and npm installed in your computer, and then run these commands:

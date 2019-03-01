@@ -4,8 +4,6 @@
         <!-- <div class="d-flex"> -->
             <div class="row">
                 <div class="col col-md-3" v-for="product in allProducts" :key="product.id">
-                <!-- {{product[0]}} -->
-
                     <div class="card my-5 mx-5" style="width: 18rem;" >
                         <div class="crop">
                             <img :src="product.imageUrl" class="" height="270px" width="270px" :alt="product.name">
@@ -21,9 +19,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-        <!-- </div> -->
     </div>
 </template>
 
@@ -63,32 +59,42 @@
                 }
             },
             addToCart(stock, productId) {
-                console.log(productId)
-                if (stock - (this.carted + 1) < 0) {
-                    swal(`Sorry we can not fulfill your request, unfortunately your buy request is more than our stock.`)
-                } else {
-                    this.carted++
-                    this.sendAmountInCart()
-                    // console.log(this.carted, '========')
-                    axios({
-                        method: 'put',
-                        url: `/cart/add/${productId}`,
-                        headers: {
-                            access_token: localStorage.getItem('token')
+                // console.log(productId)
+                if (!localStorage.getItem('token')) {
+                    swal({
+                        title: "Unauthorized Access!",
+                        text: "You need to login first. Click 'OK' to login. ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((login) => {
+                        if (login) {
+                            this.$router.push('/login')
+                        } else {
                         }
-                    })
-                    .then(({data}) => {
-                        this.getAllProducts()
-                        // this.amountProductsInCart++
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                    });
+                } else {
+                    if (stock - (this.carted + 1) < 0) {
+                        swal(`Sorry we can not fulfill your request, unfortunately your buy request is more than our stock.`)
+                    } else {
+                        this.carted++
+                        axios({
+                            method: 'put',
+                            url: `/cart/add/${productId}`,
+                            headers: {
+                                access_token: localStorage.getItem('token')
+                            }
+                        })
+                        .then(({data}) => {
+                            this.getAllProducts()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
                 }
             },
-            sendAmountInCart() {
-                this.$emit('amount-cart', this.carted)
-            }
         }
     }
 </script>

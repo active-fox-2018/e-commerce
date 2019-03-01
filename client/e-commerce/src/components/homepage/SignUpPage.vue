@@ -63,7 +63,8 @@
     export default {
         name: 'signup',
         props: {
-            msg: String
+            msg: String,
+            loginStatus: Boolean
         },
         data() {
             return {
@@ -78,15 +79,22 @@
                     email: this.email,
                     password: this.password,
                     full_name: this.full_name,
-                    role: 'admin'
+                    role: 'user'
                 })
                 .then(({data}) => {
                     localStorage.setItem('token', data)
+                    this.changeLogin()
+                    swal(`Welcome to Shopadono, ${this.full_name}!`)
+                    this.$router.replace('/shop')
                 })
                 .catch(err => {
                     console.log(err)
                 })
+            },
+            changeLogin() {
+                this.$emit('change-login', true)
             }
+            
         }
     }   
 </script>

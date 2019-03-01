@@ -14,7 +14,8 @@
                             <!-- <p class="card-text"><small class="text-muted">{{ product.carted }}</small></p> -->
                         </div>
                         <div class="mr-3">
-                            <a href="#" class="justify-align-center" @click="removeProduct(product._id)"><img class="mt-5" src="https://img.icons8.com/office/50/000000/minus.png" height="25"></a>
+                            <!-- {{product}} -->
+                            <a href="#" class="justify-align-center" @click="removeProduct(product._id, product.price)"><img class="mt-5" src="https://img.icons8.com/office/50/000000/minus.png" height="25"></a>
                         </div>
                     </div>
                 </div>
@@ -42,9 +43,6 @@
             this.getCart()
         },
         watch: {
-            // productsInMyCart(val) {
-            //     this.getCart()
-            // }
         },
         data() {
             return {
@@ -75,41 +73,33 @@
                             this.total += data[i].price
                         }
                         this.productsInMyCart = data
-                        // console.log(this.productsInMyCart)
-                        // data.forEach(p => {
-                        //     // console.log(p)
-                        //     let dataAndQuantity = {
-                        //         name: p.name,
-                        //         price: p.price,
-                        //         image: p.imageUrl
-                        //     }
-
-                        //     console.log(dataAndQuantity)
-                        // });
-                        // this.uniqueProductsInCart = [...new Set(this.productsInMyCart)]
                     })
                     .catch(err => {
                         console.log(err)
                     })
                 }
             },
-            removeProduct(id) {
+            removeProduct(id, price) {
                 swal('You are deleting a product from your cart')
-                let indexNya = 0
-                this.productsInMyCart.forEach((p, index) => {
-                    if (p._id == id) {
-                        indexNya = index
-                    }
-                });
-                this.productsInMyCart.splice(indexNya, 1)
+                console.log(id, price)
                 axios({
-                    method: 'put',
                     url: `/cart/min/${id}`,
+                    method: 'put',
                     headers: {
                         access_token: localStorage.getItem('token')
                     }
                 })
                 .then(({data}) => {
+                    console.log(data)
+                    // this.productsInMyCart.forEach((p, index) => {
+                    //     if (p._id == id) {
+                    //         indexNya = index
+                    //     }
+                    // });
+                    let index = this.productsInMyCart.findIndex(e => e._id == id)
+                    console.log(index)
+                    this.productsInMyCart.splice(index, 1)
+                    this.total = this.total - price
                 })
                 .catch(err => {
                     swal(`Error ${err}`)
@@ -117,8 +107,6 @@
             },
             clearCart() {
                 swal('Products has been successfully in cart')
-                // this.productsInMyCart = []
-                // this.total = 0
                 axios({
                     method: 'delete',
                     url: '/cart',
@@ -128,7 +116,7 @@
                 })
                 .then(({data}) => {
                     // this.getCart()
-                    this.$route.push({
+                    this.$router.push({
                         name: 'shop'
                     })
                 })
