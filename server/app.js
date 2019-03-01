@@ -6,7 +6,7 @@ const port = process.env.PORT
 const cors = require('cors')
 const mongoose = require('mongoose')
 const indexRouter = require('./routes/index')
-mongoose.connect('mongodb://localhost/e-commerc', { useNewUrlParser: true })
+mongoose.connect('mongodb+srv://mahdihrs:process.env.PASS_ATLAS@projects-a1wq0.gcp.mongodb.net/test?retryWrites=true', { useNewUrlParser: true })
 
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
