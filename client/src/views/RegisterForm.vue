@@ -71,6 +71,7 @@ export default {
           localStorage.setItem('token', data.token);
           localStorage.setItem('role', data.data.role);
           this.loginSuccess();
+          this.$router.push('/');
           console.log(data.message);
           console.log(data.data);
         })

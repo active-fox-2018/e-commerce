@@ -84,12 +84,13 @@ export default new Vuex.Store({
     clearCart(state) {
       state.userCart.products = [];
       state.userCart.totalPrice = 0;
+      state.cartCounter = 0;
     },
     search(state, data) {
-      state.searchResults = data
+      state.searchResults = data;
     },
     checkout(state, data) {
-      state.userTransactions.unshift(data)
+      state.userTransactions.unshift(data);
     },
     shippingStatus(state, index) {
       state.allTransactions[index].status = 'shipping'
@@ -179,7 +180,7 @@ export default new Vuex.Store({
         })
     },
     addToCart({ commit }, product) {
-      commit('loading', true);
+      // commit('loading', true);
       api({
         method: 'put',
         url: `/carts/products/${product._id}`,
@@ -187,7 +188,7 @@ export default new Vuex.Store({
       })
         .then(({ data }) => {
           console.log(data.message);
-          commit('loading', false);
+          // commit('loading', false);
           commit('cartCount', 1);
           commit('minusStock');
           commit('editTotalPrice', product.price);

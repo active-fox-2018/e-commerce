@@ -7,10 +7,10 @@
   </header>
     <div class="card-content" style="line-height:30px !important;">
       <div class="content has-text-left">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit.
         Modi eveniet asperiores a dolor labore,
         non nulla quo voluptatum ad ducimus tenetur autem iusto provident ex quos,
-        veniam reiciendis laudantium tempora.
+        veniam reiciendis laudantium tempora. -->
         {{ product.description }}
       </div>
     </div>

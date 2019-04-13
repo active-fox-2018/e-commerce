@@ -61,14 +61,14 @@ div.card.products:hover {
 
 }
 .crop {
-  width: 312px;
-  height: 173.75px;
+  /* width: 312px; */
+  /* height: 173.75px; */
   overflow-y: hidden;
   overflow-x: hidden;
 }
 
-.crop img {
+/* .crop img {
   margin: -15px -5px;
-}
+} */
 
 </style>
