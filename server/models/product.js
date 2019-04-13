@@ -8,7 +8,7 @@ const productSchema = new Schema({
   },
   description : {
     type : String,
-    minlength : [20, 'minimum length of description is 20 character']
+    minlength : [10, 'minimum length of description is 10 character']
   },
   image : String,
   stock: {
